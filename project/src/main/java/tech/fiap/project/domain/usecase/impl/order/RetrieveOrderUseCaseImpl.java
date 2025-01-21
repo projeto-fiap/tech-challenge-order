@@ -1,7 +1,7 @@
 package tech.fiap.project.domain.usecase.impl.order;
 
-import tech.fiap.project.domain.dataprovider.OrderDataProvider;
 import tech.fiap.project.domain.entity.Order;
+import tech.fiap.project.domain.dataprovider.OrderDataProvider;
 import tech.fiap.project.domain.usecase.order.RetrieveOrderUseCase;
 
 import java.util.List;

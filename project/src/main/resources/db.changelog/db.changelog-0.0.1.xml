@@ -18,11 +18,11 @@
                 <constraints nullable="false"/>
             </column>
             <column name="updated_date" type="timestamp"/>
-            <column name="payment_id" type="bigint"/>
             <column name="total_price" type="decimal(10,2)">
                 <constraints nullable="false"/>
             </column>
             <column name="awaiting_time" type="decimal(10,2)"/>
+            <column name="person_id" type="bigint"/> <!-- Adicionando referência ao ID de PersonEntity -->
         </createTable>
 
         <!-- Criação da tabela de item -->
@@ -42,9 +42,28 @@
             <column name="unit" type="varchar(255)"/>
             <column name="fk_order" type="bigint"/>
         </createTable>
-
     </changeSet>
-    <changeSet id="2" author="gabriel.oliveira" dbms="postgres">
+
+    <!-- Criação da tabela de relacionamento para IDs de pagamento -->
+    <changeSet id="2" author="gabriel.oliveira">
+        <createTable tableName="order_payment_ids">
+            <column name="order_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="order_payment_ids"
+                baseColumnNames="order_id"
+                constraintName="fk_order_payment_order"
+                referencedTableName="order"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <!-- Adicionando chave estrangeira na tabela item -->
+    <changeSet id="3" author="gabriel.oliveira">
         <addForeignKeyConstraint
                 baseTableName="item"
                 baseColumnNames="fk_order"
@@ -52,10 +71,4 @@
                 referencedTableName="order"
                 referencedColumnNames="id"/>
     </changeSet>
-
-    <changeSet id="4" author="gabriel.oliveira" objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-    <addForeignKeyConstraint baseTableName="item" baseColumnNames="fk_order" constraintName="fk_order" referencedTableName="order"
-                             referencedColumnNames="id"/>
-</changeSet>
-
 </databaseChangeLog>

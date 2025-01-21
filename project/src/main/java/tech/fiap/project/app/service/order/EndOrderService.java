@@ -10,10 +10,11 @@ import java.awt.image.BufferedImage;
 @AllArgsConstructor
 public class EndOrderService {
 
-	private EndOrderUseCase endOrderUseCase;
+	// private EndOrderUseCase endOrderUseCase;
 
 	public BufferedImage execute(Long id) {
-		return endOrderUseCase.execute(id);
+		// return endOrderUseCase.execute(id);
+		return null;
 	}
 
 }

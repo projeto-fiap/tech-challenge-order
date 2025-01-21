@@ -7,7 +7,7 @@ import tech.fiap.project.app.dto.OrderResponseDTO;
 import tech.fiap.project.domain.entity.Kitchen;
 import tech.fiap.project.domain.entity.KitchenStatus;
 import tech.fiap.project.domain.entity.OrderStatus;
-import tech.fiap.project.domain.usecase.kitchen.KitchenRetrieveUseCase;
+
 import tech.fiap.project.domain.usecase.order.RetrieveOrderUseCase;
 
 import java.time.Duration;
@@ -19,29 +19,32 @@ import java.util.*;
 @AllArgsConstructor
 public class RetrieveOrderService {
 
-	private RetrieveOrderUseCase retrieveOrderUseCase;
+	// private RetrieveOrderUseCase retrieveOrderUseCase;
 
-	private KitchenRetrieveUseCase kitchenRetrieveUseCase;
+	// private KitchenRetrieveUseCase kitchenRetrieveUseCase;
 
-	public List<OrderResponseDTO> findAll() {
-		List<OrderResponseDTO> dto = OrderMapper.toDTO(retrieveOrderUseCase.findAll());
-		dto.forEach(this::setDuration);
-		return dto;
-	}
+	// public List<OrderResponseDTO> findAll() {
+	// List<OrderResponseDTO> dto = OrderMapper.toDTO(retrieveOrderUseCase.findAll());
+	// dto.forEach(this::setDuration);
+	// return dto;
+	// }
 
-	public Optional<OrderResponseDTO> findById(Long id) {
-		Optional<OrderResponseDTO> orderDTO = retrieveOrderUseCase.findByIdWithPayment(id).map(OrderMapper::toDTO);
-		orderDTO.ifPresent(this::setDuration);
-		return orderDTO;
-	}
+	// public Optional<OrderResponseDTO> findById(Long id) {
+	// Optional<OrderResponseDTO> orderDTO =
+	// retrieveOrderUseCase.findByIdWithPayment(id).map(OrderMapper::toDTO);
+	// orderDTO.ifPresent(this::setDuration);
+	// return orderDTO;
+	// }
 
 	public List<OrderResponseDTO> findOngoingAll() {
-		List<Kitchen> kitchenDto = kitchenRetrieveUseCase.findAll();
-		List<Long> kichenIds = new ArrayList<>();
-		kitchenDto.stream().map(Kitchen::getOrderId).forEach(kichenIds::add);
-		List<OrderResponseDTO> dto = OrderMapper.toDTO(retrieveOrderUseCase.findAllById(kichenIds), kitchenDto);
+		// List<Kitchen> kitchenDto = kitchenRetrieveUseCase.findAll();
+		// List<Long> kichenIds = new ArrayList<>();
+		// kitchenDto.stream().map(Kitchen::getOrderId).forEach(kichenIds::add);
+		// List<OrderResponseDTO> dto =
+		// OrderMapper.toDTO(retrieveOrderUseCase.findAllById(kichenIds), kitchenDto);
 
-		return sortByStatusThanDate(dto);
+		// return sortByStatusThanDate(dto);
+		return null;
 	}
 
 	private void setDuration(OrderResponseDTO order) {

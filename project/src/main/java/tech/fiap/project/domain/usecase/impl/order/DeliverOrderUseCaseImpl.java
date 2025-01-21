@@ -5,6 +5,7 @@ import tech.fiap.project.domain.entity.OrderStatus;
 import tech.fiap.project.domain.usecase.order.CreateOrUpdateOrderUseCase;
 import tech.fiap.project.domain.usecase.order.DeliverOrderUseCase;
 import tech.fiap.project.domain.usecase.order.RetrieveOrderUseCase;
+import tech.fiap.project.infra.exception.OrderNotFound;
 
 import java.util.Optional;
 
