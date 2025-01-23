@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: project
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=public
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db.changelog/db.changelog-master.xml
+    drop-first: true
+    enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+      globally_quoted_identifiers: true
+      show_sql: true
+  main:
+    allow-bean-definition-overriding: true
+
+  mvc:
+    pathmatch:
+      matching-strategy=ant_path_matcher:logging:
+  level:
+    root: INFO
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
