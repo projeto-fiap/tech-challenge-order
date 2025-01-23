@@ -1,13 +1,10 @@
 package tech.fiap.project.app.adapter;
 
 import tech.fiap.project.app.dto.*;
-import tech.fiap.project.domain.entity.Kitchen;
 import tech.fiap.project.domain.entity.Order;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 public class OrderMapper {
 
