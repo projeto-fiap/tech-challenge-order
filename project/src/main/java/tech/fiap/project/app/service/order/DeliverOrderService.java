@@ -2,21 +2,25 @@ package tech.fiap.project.app.service.order;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import tech.fiap.project.app.adapter.OrderMapper;
+import tech.fiap.project.app.dto.OrderResponseDTO;
 import tech.fiap.project.domain.entity.Order;
+import tech.fiap.project.domain.usecase.order.DeliverOrderUseCase;
+import tech.fiap.project.domain.usecase.order.RetrieveOrderUseCase;
 
 @Service
 @AllArgsConstructor
 public class DeliverOrderService {
 
-	// private DeliverOrderUseCase deliverOrderUseCase;
+	private DeliverOrderUseCase deliverOrderUseCase;
 
-	// private RetrieveOrderUseCase retrieveOrderUseCase;
+	private RetrieveOrderUseCase retrieveOrderUseCase;
 
 	// private KitchenRetrieveUseCase kitchenRetrieveUseCase;
 
-	// public OrderResponseDTO execute(Long id) {
-	// return OrderMapper.toResponse(deliverOrder(id));
-	// }
+	public OrderResponseDTO execute(Long id) {
+		return OrderMapper.toResponse(deliverOrder(id));
+	}
 
 	private Order deliverOrder(Long id) {
 		return null;

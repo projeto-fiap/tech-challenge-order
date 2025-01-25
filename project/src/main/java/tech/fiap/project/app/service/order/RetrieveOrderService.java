@@ -2,9 +2,11 @@ package tech.fiap.project.app.service.order;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import tech.fiap.project.app.adapter.OrderMapper;
 import tech.fiap.project.app.dto.OrderResponseDTO;
 import tech.fiap.project.domain.entity.KitchenStatus;
 import tech.fiap.project.domain.entity.OrderStatus;
+import tech.fiap.project.domain.usecase.order.RetrieveOrderUseCase;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -15,22 +17,21 @@ import java.util.*;
 @AllArgsConstructor
 public class RetrieveOrderService {
 
-	// private RetrieveOrderUseCase retrieveOrderUseCase;
+	private RetrieveOrderUseCase retrieveOrderUseCase;
 
 	// private KitchenRetrieveUseCase kitchenRetrieveUseCase;
 
-	// public List<OrderResponseDTO> findAll() {
-	// List<OrderResponseDTO> dto = OrderMapper.toDTO(retrieveOrderUseCase.findAll());
-	// dto.forEach(this::setDuration);
-	// return dto;
-	// }
+	public List<OrderResponseDTO> findAll() {
+		List<OrderResponseDTO> dto = OrderMapper.toDTO(retrieveOrderUseCase.findAll());
+		dto.forEach(this::setDuration);
+		return dto;
+	}
 
-	// public Optional<OrderResponseDTO> findById(Long id) {
-	// Optional<OrderResponseDTO> orderDTO =
-	// retrieveOrderUseCase.findByIdWithPayment(id).map(OrderMapper::toDTO);
-	// orderDTO.ifPresent(this::setDuration);
-	// return orderDTO;
-	// }
+	public Optional<OrderResponseDTO> findById(Long id) {
+		Optional<OrderResponseDTO> orderDTO = retrieveOrderUseCase.findByIdWithPayment(id).map(OrderMapper::toDTO);
+		orderDTO.ifPresent(this::setDuration);
+		return orderDTO;
+	}
 
 	public List<OrderResponseDTO> findOngoingAll() {
 		// List<Kitchen> kitchenDto = kitchenRetrieveUseCase.findAll();

@@ -28,23 +28,21 @@ public class OrderController {
 
 	private DeliverOrderService deliverOrderService;
 
-	// @PostMapping
-	// public ResponseEntity<OrderResponseDTO> createOrUpdate(@RequestBody OrderRequestDTO
-	// orderRequestDTO) {
-	// OrderResponseDTO orderCreated = createOrderService.execute(orderRequestDTO);
-	// return ResponseEntity.ok(orderCreated);
-	// }
+	@PostMapping
+	public ResponseEntity<OrderResponseDTO> createOrUpdate(@RequestBody OrderRequestDTO orderRequestDTO) {
+		OrderResponseDTO orderCreated = createOrderService.execute(orderRequestDTO);
+		return ResponseEntity.ok(orderCreated);
+	}
 
-	// @GetMapping
-	// public ResponseEntity<List<OrderResponseDTO>> retrieveOrders() {
-	// return ResponseEntity.ok(retrieveOrderService.findAll());
-	// }
+	@GetMapping
+	public ResponseEntity<List<OrderResponseDTO>> retrieveOrders() {
+		return ResponseEntity.ok(retrieveOrderService.findAll());
+	}
 
-	// @GetMapping("/{id}")
-	// public ResponseEntity<OrderResponseDTO> retrieveOrderById(@PathVariable Long id) {
-	// return
-	// retrieveOrderService.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-	// }
+	@GetMapping("/{id}")
+	public ResponseEntity<OrderResponseDTO> retrieveOrderById(@PathVariable Long id) {
+		return retrieveOrderService.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+	}
 
 	@PutMapping(value = "/endOrder/{id}", produces = MediaType.IMAGE_PNG_VALUE)
 	public ResponseEntity<BufferedImage> endOrder(@PathVariable Long id) {
@@ -72,11 +70,11 @@ public class OrderController {
 	public ResponseEntity<List<OrderResponseDTO>> ongoingOrders() {
 		return ResponseEntity.ok(retrieveOrderService.findOngoingAll());
 	}
-	//
-	// @PutMapping(value = "/deliver/{id}")
-	// public ResponseEntity<OrderResponseDTO> deliver(@PathVariable Long id) {
-	// OrderResponseDTO deliveredOrder = deliverOrderService.execute(id);
-	// return ResponseEntity.ok(deliveredOrder);
-	// }
+
+	@PutMapping(value = "/deliver/{id}")
+	public ResponseEntity<OrderResponseDTO> deliver(@PathVariable Long id) {
+		OrderResponseDTO deliveredOrder = deliverOrderService.execute(id);
+		return ResponseEntity.ok(deliveredOrder);
+	}
 
 }

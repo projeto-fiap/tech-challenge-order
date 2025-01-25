@@ -9,6 +9,8 @@ import java.util.Currency;
 @Data
 public class PaymentDTO {
 
+	private Long id;
+
 	private LocalDateTime paymentDate;
 
 	private String paymentMethod;

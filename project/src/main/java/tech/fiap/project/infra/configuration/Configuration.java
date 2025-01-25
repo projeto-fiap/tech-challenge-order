@@ -10,12 +10,19 @@ import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import tech.fiap.project.domain.dataprovider.ItemDataProvider;
 
+import tech.fiap.project.domain.dataprovider.OrderDataProvider;
 import tech.fiap.project.domain.usecase.impl.item.*;
 
 import tech.fiap.project.domain.usecase.impl.order.CalculateTotalOrderUseCaseImpl;
 
+import tech.fiap.project.domain.usecase.impl.order.DeliverOrderUseCaseImpl;
+import tech.fiap.project.domain.usecase.impl.order.EndOrderUseCaseImpl;
+import tech.fiap.project.domain.usecase.impl.order.RetrieveOrderUseCaseImpl;
 import tech.fiap.project.domain.usecase.item.DeleteItemUseCase;
 import tech.fiap.project.domain.usecase.item.InitializeItemUseCase;
+import tech.fiap.project.domain.usecase.order.CreateOrUpdateOrderUseCase;
+import tech.fiap.project.domain.usecase.order.DeliverOrderUseCase;
+import tech.fiap.project.domain.usecase.order.EndOrderUseCase;
 
 import java.awt.image.BufferedImage;
 import java.text.DateFormat;
@@ -51,11 +58,10 @@ public class Configuration {
 		return new CreateItemUseCaseImpl(itemDataProvider);
 	}
 
-	// @Bean
-	// public RetrieveOrderUseCaseImpl retrieveOrderUseCase(OrderDataProvider
-	// orderDataProvider) {
-	// return new RetrieveOrderUseCaseImpl(orderDataProvider);
-	// }
+	@Bean
+	public RetrieveOrderUseCaseImpl retrieveOrderUseCase(OrderDataProvider orderDataProvider) {
+		return new RetrieveOrderUseCaseImpl(orderDataProvider);
+	}
 
 	@Bean
 	public InitializeItemUseCase initializeItemUseCase(ItemDataProvider itemDataProvider) {
@@ -67,17 +73,33 @@ public class Configuration {
 		return new CalculateTotalOrderUseCaseImpl();
 	}
 
-	// @Bean
-	// public DeliverOrderUseCase deliverOrderUseCase(CreateOrUpdateOrderUseCase
-	// createOrUpdateOrderUseCase,
-	// RetrieveOrderUseCaseImpl retrieveOrderUseCase) {
-	// return new DeliverOrderUseCaseImpl(createOrUpdateOrderUseCase,
-	// retrieveOrderUseCase);
-	// }
+	@Bean
+	public DeliverOrderUseCase deliverOrderUseCase(CreateOrUpdateOrderUseCase createOrUpdateOrderUseCase,
+			RetrieveOrderUseCaseImpl retrieveOrderUseCase) {
+		return new DeliverOrderUseCaseImpl(createOrUpdateOrderUseCase, retrieveOrderUseCase);
+	}
 
 	@Bean
 	public DeleteItemUseCase deleteItemUseCase(ItemDataProvider itemDataProvider) {
 		return new DeleteItemUseCaseImpl(itemDataProvider);
+	}
+
+	@Bean
+	public EndOrderUseCase endOrderUseCase(CreateOrUpdateOrderUseCase createOrUpdateOrderUseCase,
+			RetrieveOrderUseCaseImpl retrieveOrderUseCase // CreateQrCodeUseCase
+															// createQrCodeUseCase
+	) {
+		return new EndOrderUseCaseImpl(createOrUpdateOrderUseCase, retrieveOrderUseCase // createQrCodeUseCase
+		);
+	}
+
+	@Bean
+	public CreateOrUpdateOrderUseCaseImpl createOrUpdateOrderUseCaseImpl(
+			InitializeItemUseCase initializeItemUseCaseImpl, OrderDataProvider orderDataProvider,
+			// InitializePersonUseCase initializePersonUseCase,
+			CalculateTotalOrderUseCaseImpl calculateTotalOrderUseCase) {
+		return new CreateOrUpdateOrderUseCaseImpl(orderDataProvider, // initializePersonUseCase,
+				initializeItemUseCaseImpl, calculateTotalOrderUseCase);
 	}
 
 }
