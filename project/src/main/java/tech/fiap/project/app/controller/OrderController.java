@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tech.fiap.project.app.dto.KitchenDTO;
 import tech.fiap.project.app.dto.OrderRequestDTO;
 import tech.fiap.project.app.dto.OrderResponseDTO;
 import tech.fiap.project.app.service.order.*;
@@ -50,31 +51,27 @@ public class OrderController {
 		return ResponseEntity.ok(qrcode);
 	}
 
-	// @PutMapping(value = "/checkout/{id}")
-	// public ResponseEntity<OrderResponseDTO> checkout(@PathVariable Long id) {
-	// //Optional<OrderResponseDTO> paidOrder = checkoutOrderService.execute(id);
-	// if (paidOrder.isPresent()) {
-	// // Optional<KitchenDTO> kitchenQueue = kitchenService.create(paidOrder.get());
-	// // kitchenQueue.ifPresent(kitchenDTO ->
-	// // paidOrder.get().setKitchenQueue(kitchenDTO));
-	// // return
-	// // paidOrder.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-	// // altera para chamada http
-	// return null;
-	//
-	// }
-	// return ResponseEntity.notFound().build();
-	// }
+//	 @PutMapping(value = "/checkout/{id}")
+//	 public ResponseEntity<OrderResponseDTO> checkout(@PathVariable Long id) {
+//	 Optional<OrderResponseDTO> paidOrder = checkoutOrderService.execute(id);
+//	 if (paidOrder.isPresent()) {
+//	  Optional<KitchenDTO> kitchenQueue = kitchenService.create(paidOrder.get());
+//	  kitchenQueue.ifPresent(kitchenDTO ->
+//	  paidOrder.get().setKitchenQueue(kitchenDTO));
+//	  return paidOrder.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+//	 }
+//	 return ResponseEntity.notFound().build();
+//	 }
 
 	@GetMapping(value = "/ongoing/orders")
 	public ResponseEntity<List<OrderResponseDTO>> ongoingOrders() {
 		return ResponseEntity.ok(retrieveOrderService.findOngoingAll());
 	}
 
-	@PutMapping(value = "/deliver/{id}")
-	public ResponseEntity<OrderResponseDTO> deliver(@PathVariable Long id) {
-		OrderResponseDTO deliveredOrder = deliverOrderService.execute(id);
-		return ResponseEntity.ok(deliveredOrder);
-	}
+//	@PutMapping(value = "/deliver/{id}")
+//	public ResponseEntity<OrderResponseDTO> deliver(@PathVariable Long id) {
+//		OrderResponseDTO deliveredOrder = deliverOrderService.execute(id);
+//		return ResponseEntity.ok(deliveredOrder);
+//	}
 
 }

@@ -2,6 +2,7 @@ package tech.fiap.project.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tech.fiap.project.app.dto.PaymentDTO;
 import tech.fiap.project.app.dto.PersonDTO;
@@ -14,6 +15,7 @@ import java.util.List;
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Order {
 
 	private Long id;
