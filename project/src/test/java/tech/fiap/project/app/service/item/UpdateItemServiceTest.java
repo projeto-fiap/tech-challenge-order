@@ -20,71 +20,70 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UpdateItemServiceTest {
 
-    @Mock
-    private UpdateItemUseCase updateItemUseCase;
+	@Mock
+	private UpdateItemUseCase updateItemUseCase;
 
-    @InjectMocks
-    private UpdateItemService updateItemService;
+	@InjectMocks
+	private UpdateItemService updateItemService;
 
-    private ItemDTO itemDTO;
-    private Item updatedItem;
-    private ItemDTO updatedItemDTO;
+	private ItemDTO itemDTO;
 
-    @BeforeEach
-    void setUp() {
-        itemDTO = new ItemDTO();
-        itemDTO.setId(1L);
-        itemDTO.setName("Item Teste");
-        itemDTO.setPrice(BigDecimal.valueOf(10.0));
-        itemDTO.setQuantity(BigDecimal.valueOf(2));
-        itemDTO.setUnit("un");
-        itemDTO.setDescription("Teste de item");
-        itemDTO.setImageUrl("http://image.url");
-        itemDTO.setCategory(ItemCategory.valueOf("FOOD"));
+	private Item updatedItem;
 
-        updatedItem = new Item();
-        updatedItem.setId(1L);
-        updatedItem.setName("Item Atualizado");
-        updatedItem.setPrice(BigDecimal.valueOf(15.0));
-        updatedItem.setQuantity(BigDecimal.valueOf(3));
-        updatedItem.setUnit("un");
-        updatedItem.setDescription("Item atualizado");
-        updatedItem.setImageUrl("http://image.updated.url");
-        updatedItem.setItemCategory(null);
-        updatedItem.setIngredients(null);
+	private ItemDTO updatedItemDTO;
 
-        updatedItemDTO = ItemMapper.toDTO(updatedItem);
-    }
+	@BeforeEach
+	void setUp() {
+		itemDTO = new ItemDTO();
+		itemDTO.setId(1L);
+		itemDTO.setName("Item Teste");
+		itemDTO.setPrice(BigDecimal.valueOf(10.0));
+		itemDTO.setQuantity(BigDecimal.valueOf(2));
+		itemDTO.setUnit("un");
+		itemDTO.setDescription("Teste de item");
+		itemDTO.setImageUrl("http://image.url");
+		itemDTO.setCategory(ItemCategory.valueOf("FOOD"));
 
-    @Test
-    void testUpdateItem() {
-        when(updateItemUseCase.execute(anyLong(), any(Item.class))).thenReturn(updatedItem);
+		updatedItem = new Item();
+		updatedItem.setId(1L);
+		updatedItem.setName("Item Atualizado");
+		updatedItem.setPrice(BigDecimal.valueOf(15.0));
+		updatedItem.setQuantity(BigDecimal.valueOf(3));
+		updatedItem.setUnit("un");
+		updatedItem.setDescription("Item atualizado");
+		updatedItem.setImageUrl("http://image.updated.url");
+		updatedItem.setItemCategory(null);
+		updatedItem.setIngredients(null);
 
-        ItemDTO result = updateItemService.updateItem(1L, itemDTO);
+		updatedItemDTO = ItemMapper.toDTO(updatedItem);
+	}
 
-        assertNotNull(result);
-        assertEquals(updatedItemDTO.getName(), result.getName());
-        assertEquals(updatedItemDTO.getPrice(), result.getPrice());
-        assertEquals(updatedItemDTO.getQuantity(), result.getQuantity());
-        assertEquals(updatedItemDTO.getUnit(), result.getUnit());
-        assertEquals(updatedItemDTO.getDescription(), result.getDescription());
-        assertEquals(updatedItemDTO.getImageUrl(), result.getImageUrl());
-        verify(updateItemUseCase, times(1)).execute(eq(1L), any(Item.class));
-    }
+	@Test
+	void testUpdateItem() {
+		when(updateItemUseCase.execute(anyLong(), any(Item.class))).thenReturn(updatedItem);
 
-    @Test
-    void testUpdateItemNotFound() {
+		ItemDTO result = updateItemService.updateItem(1L, itemDTO);
 
-        when(updateItemUseCase.execute(anyLong(), any(Item.class))).thenReturn(null);
+		assertNotNull(result);
+		assertEquals(updatedItemDTO.getName(), result.getName());
+		assertEquals(updatedItemDTO.getPrice(), result.getPrice());
+		assertEquals(updatedItemDTO.getQuantity(), result.getQuantity());
+		assertEquals(updatedItemDTO.getUnit(), result.getUnit());
+		assertEquals(updatedItemDTO.getDescription(), result.getDescription());
+		assertEquals(updatedItemDTO.getImageUrl(), result.getImageUrl());
+		verify(updateItemUseCase, times(1)).execute(eq(1L), any(Item.class));
+	}
 
+	@Test
+	void testUpdateItemNotFound() {
 
-        ItemDTO result = updateItemService.updateItem(1L, itemDTO);
+		when(updateItemUseCase.execute(anyLong(), any(Item.class))).thenReturn(null);
 
+		ItemDTO result = updateItemService.updateItem(1L, itemDTO);
 
-        assertNull(result);
+		assertNull(result);
 
-
-        verify(updateItemUseCase, times(1)).execute(eq(1L), any(Item.class));
-    }
+		verify(updateItemUseCase, times(1)).execute(eq(1L), any(Item.class));
+	}
 
 }

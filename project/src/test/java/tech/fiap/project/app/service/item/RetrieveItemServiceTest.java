@@ -22,79 +22,81 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RetrieveItemServiceTest {
 
-    @Mock
-    private RetrieveItemUseCase retrieveItemUseCase;
+	@Mock
+	private RetrieveItemUseCase retrieveItemUseCase;
 
-    @InjectMocks
-    private RetrieveItemService retrieveItemService;
+	@InjectMocks
+	private RetrieveItemService retrieveItemService;
 
-    private Item item;
-    private ItemDTO itemDTO;
-    private List<Item> itemList;
+	private Item item;
 
-    @BeforeEach
-    void setUp() {
-        item = new Item();
-        item.setId(1L);
-        item.setName("Item Teste");
-        item.setPrice(BigDecimal.valueOf(10.0));
-        item.setQuantity(BigDecimal.valueOf(2));
-        item.setUnit("un");
-        item.setDescription("Teste de item");
-        item.setImageUrl("http://image.url");
-        item.setItemCategory(ItemCategory.FOOD);
-        item.setIngredients(List.of());
+	private ItemDTO itemDTO;
 
-        itemDTO = ItemMapper.toDTO(item);
-        itemList = List.of(item);
-    }
+	private List<Item> itemList;
 
-    @Test
-    void testFindAll() {
+	@BeforeEach
+	void setUp() {
+		item = new Item();
+		item.setId(1L);
+		item.setName("Item Teste");
+		item.setPrice(BigDecimal.valueOf(10.0));
+		item.setQuantity(BigDecimal.valueOf(2));
+		item.setUnit("un");
+		item.setDescription("Teste de item");
+		item.setImageUrl("http://image.url");
+		item.setItemCategory(ItemCategory.FOOD);
+		item.setIngredients(List.of());
 
-        when(retrieveItemUseCase.findAll()).thenReturn(itemList);
-        List<ItemDTO> result = retrieveItemService.findAll();
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(itemDTO.getName(), result.get(0).getName());
-        verify(retrieveItemUseCase, times(1)).findAll();
-    }
+		itemDTO = ItemMapper.toDTO(item);
+		itemList = List.of(item);
+	}
 
-    @Test
-    void testFindById() {
-        Long itemId = 1L;
-        when(retrieveItemUseCase.findById(itemId)).thenReturn(Optional.of(item));
-        Optional<ItemDTO> result = retrieveItemService.findById(itemId);
-        assertTrue(result.isPresent());
-        assertEquals(itemDTO.getName(), result.get().getName());
-        verify(retrieveItemUseCase, times(1)).findById(itemId);
-    }
+	@Test
+	void testFindAll() {
 
-    @Test
-    void testFindByIdNotFound() {
-        Long itemId = 1L;
-        when(retrieveItemUseCase.findById(itemId)).thenReturn(Optional.empty());
-        Optional<ItemDTO> result = retrieveItemService.findById(itemId);
-        assertFalse(result.isPresent());
-        verify(retrieveItemUseCase, times(1)).findById(itemId);
-    }
+		when(retrieveItemUseCase.findAll()).thenReturn(itemList);
+		List<ItemDTO> result = retrieveItemService.findAll();
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		assertEquals(itemDTO.getName(), result.get(0).getName());
+		verify(retrieveItemUseCase, times(1)).findAll();
+	}
 
-    @Test
-    void testFindByCategory() {
+	@Test
+	void testFindById() {
+		Long itemId = 1L;
+		when(retrieveItemUseCase.findById(itemId)).thenReturn(Optional.of(item));
+		Optional<ItemDTO> result = retrieveItemService.findById(itemId);
+		assertTrue(result.isPresent());
+		assertEquals(itemDTO.getName(), result.get().getName());
+		verify(retrieveItemUseCase, times(1)).findById(itemId);
+	}
 
-        String category = "FOOD";
-        when(retrieveItemUseCase.findByCategory(ItemCategory.FOOD)).thenReturn(itemList);
-        List<ItemDTO> result = retrieveItemService.findByCategory(category);
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(itemDTO.getName(), result.get(0).getName());
-        verify(retrieveItemUseCase, times(1)).findByCategory(ItemCategory.FOOD);
-    }
+	@Test
+	void testFindByIdNotFound() {
+		Long itemId = 1L;
+		when(retrieveItemUseCase.findById(itemId)).thenReturn(Optional.empty());
+		Optional<ItemDTO> result = retrieveItemService.findById(itemId);
+		assertFalse(result.isPresent());
+		verify(retrieveItemUseCase, times(1)).findById(itemId);
+	}
 
+	@Test
+	void testFindByCategory() {
 
-    @Test
-    void testFindByCategoryInvalid() {
-        String category = "INVALID_CATEGORY";
-        assertThrows(IllegalArgumentException.class, () -> retrieveItemService.findByCategory(category));
-    }
+		String category = "FOOD";
+		when(retrieveItemUseCase.findByCategory(ItemCategory.FOOD)).thenReturn(itemList);
+		List<ItemDTO> result = retrieveItemService.findByCategory(category);
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		assertEquals(itemDTO.getName(), result.get(0).getName());
+		verify(retrieveItemUseCase, times(1)).findByCategory(ItemCategory.FOOD);
+	}
+
+	@Test
+	void testFindByCategoryInvalid() {
+		String category = "INVALID_CATEGORY";
+		assertThrows(IllegalArgumentException.class, () -> retrieveItemService.findByCategory(category));
+	}
+
 }

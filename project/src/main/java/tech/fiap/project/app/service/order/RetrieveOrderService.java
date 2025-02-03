@@ -1,25 +1,39 @@
 package tech.fiap.project.app.service.order;
 
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import tech.fiap.project.app.adapter.OrderMapper;
+import tech.fiap.project.app.dto.KitchenDTO;
 import tech.fiap.project.app.dto.OrderResponseDTO;
 import tech.fiap.project.domain.entity.KitchenStatus;
 import tech.fiap.project.domain.entity.OrderStatus;
 import tech.fiap.project.domain.usecase.order.RetrieveOrderUseCase;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class RetrieveOrderService {
 
-	private RetrieveOrderUseCase retrieveOrderUseCase;
+	private final RetrieveOrderUseCase retrieveOrderUseCase;
 
-	// private KitchenRetrieveUseCase kitchenRetrieveUseCase;
+	private final String kitchenServiceUrl = "http://kitchen-service/api/kitchen"; // URL
+																					// do
+																					// serviço
+																					// de
+																					// cozinha
+
+	private final RestTemplate restTemplate;
 
 	public List<OrderResponseDTO> findAll() {
 		List<OrderResponseDTO> dto = OrderMapper.toDTO(retrieveOrderUseCase.findAll());
@@ -34,19 +48,37 @@ public class RetrieveOrderService {
 	}
 
 	public List<OrderResponseDTO> findOngoingAll() {
-		// List<Kitchen> kitchenDto = kitchenRetrieveUseCase.findAll();
-		// List<Long> kichenIds = new ArrayList<>();
-		// kitchenDto.stream().map(Kitchen::getOrderId).forEach(kichenIds::add);
-		// List<OrderResponseDTO> dto =
-		// OrderMapper.toDTO(retrieveOrderUseCase.findAllById(kichenIds), kitchenDto);
+		// Criando um objeto HttpHeaders
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		// return sortByStatusThanDate(dto);
-		return null;
+		// Criando um objeto HttpEntity com os headers
+		HttpEntity<String> entity = new HttpEntity<>(headers);
+
+		// Realizando a requisição GET usando o método exchange
+		ResponseEntity<List<KitchenDTO>> response = restTemplate.exchange(kitchenServiceUrl, HttpMethod.GET, entity,
+				new ParameterizedTypeReference<List<KitchenDTO>>() {
+				});
+
+		List<KitchenDTO> kitchenDto = response.getBody();
+		if (kitchenDto == null || kitchenDto.isEmpty()) {
+			return new ArrayList<>();
+		}
+
+		// Extraindo os IDs das ordens da lista de KitchenDTO
+		List<Long> kitchenIds = kitchenDto.stream().map(KitchenDTO::getOrderId).collect(Collectors.toList());
+
+		// Obtemos os pedidos associados aos IDs
+		List<OrderResponseDTO> dto = OrderMapper.toDTO(retrieveOrderUseCase.findAllById(kitchenIds), kitchenDto);
+
+		return sortByStatusThanDate(dto);
 	}
 
-	private void setDuration(OrderResponseDTO order) {
-		long seconds = Duration.between(order.getCreatedDate(), LocalDateTime.now()).getSeconds();
-		order.setAwaitingTime(Duration.of(seconds, ChronoUnit.SECONDS));
+	public void setDuration(OrderResponseDTO order) {
+		if (order.getCreatedDate() != null && order.getUpdatedDate() != null) {
+			Duration awaitingTime = Duration.between(order.getCreatedDate(), order.getUpdatedDate());
+			order.setAwaitingTime(awaitingTime);
+		}
 	}
 
 	private List<OrderResponseDTO> sortByStatusThanDate(List<OrderResponseDTO> listOrder) {
@@ -86,6 +118,12 @@ public class RetrieveOrderService {
 		statusOrder.put(KitchenStatus.IN_PRODUCTION, 2);
 		statusOrder.put(KitchenStatus.DONE, 3);
 		return statusOrder;
+	}
+
+	// Configuração do RestTemplate
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
 	}
 
 }

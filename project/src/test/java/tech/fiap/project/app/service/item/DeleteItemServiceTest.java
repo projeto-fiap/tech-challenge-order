@@ -15,39 +15,37 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class DeleteItemServiceTest {
 
-    @Mock
-    private DeleteItemUseCase deleteItemUseCase;
+	@Mock
+	private DeleteItemUseCase deleteItemUseCase;
 
-    @InjectMocks
-    private DeleteItemService deleteItemService;
+	@InjectMocks
+	private DeleteItemService deleteItemService;
 
-    private Long itemId;
+	private Long itemId;
 
-    @BeforeEach
-    void setUp() {
-        itemId = 1L;
-    }
+	@BeforeEach
+	void setUp() {
+		itemId = 1L;
+	}
 
-    @Test
-    void testDeleteItem() {
-        deleteItemService.deleteItem(itemId);
-        verify(deleteItemUseCase, times(1)).execute(itemId);
-    }
+	@Test
+	void testDeleteItem() {
+		deleteItemService.deleteItem(itemId);
+		verify(deleteItemUseCase, times(1)).execute(itemId);
+	}
 
-    @Test
-    void testDeleteItemWhenIdIsNull() {
+	@Test
+	void testDeleteItemWhenIdIsNull() {
 
-        Long nullItemId = null;
+		Long nullItemId = null;
 
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			deleteItemService.deleteItem(nullItemId);
+		});
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            deleteItemService.deleteItem(nullItemId);
-        });
+		assertEquals("ID cannot be null", exception.getMessage());
 
+		verify(deleteItemUseCase, times(0)).execute(nullItemId);
+	}
 
-        assertEquals("ID cannot be null", exception.getMessage());
-
-
-        verify(deleteItemUseCase, times(0)).execute(nullItemId);
-    }
 }

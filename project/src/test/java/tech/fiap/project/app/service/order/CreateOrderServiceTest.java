@@ -20,54 +20,61 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class CreateOrderServiceTest {
 
-    @Mock
-    private CreateOrUpdateOrderUseCase createOrUpdateOrderUsecase;
+	@Mock
+	private CreateOrUpdateOrderUseCase createOrUpdateOrderUsecase;
 
-    @InjectMocks
-    private CreateOrderService createOrderService;
+	@InjectMocks
+	private CreateOrderService createOrderService;
 
-    private OrderRequestDTO orderRequestDTO;
-    private Order order;
-    private OrderResponseDTO orderResponseDTO;
+	private OrderRequestDTO orderRequestDTO;
 
-    @BeforeEach
-    void setUp() {
-        // Initialize orderRequestDTO with test data
-        orderRequestDTO = new OrderRequestDTO();
+	private Order order;
 
-        // Initialize order and make sure items and payments are not null
-        order = new Order();
-        order.setItems(Collections.emptyList());  // Ensure items is initialized
-        order.setPayments(Collections.emptyList());  // Ensure payments is initialized
+	private OrderResponseDTO orderResponseDTO;
 
-        // Initialize the response DTO
-        orderResponseDTO = OrderMapper.toResponse(order);
+	@BeforeEach
+	void setUp() {
+		// Initialize orderRequestDTO with test data
+		orderRequestDTO = new OrderRequestDTO();
 
-        // Stub the usecase method to return the order
-        doReturn(order).when(createOrUpdateOrderUsecase).execute(any(Order.class));  // Use 'any(Order.class)' to match any Order
-    }
+		// Initialize order and make sure items and payments are not null
+		order = new Order();
+		order.setItems(Collections.emptyList()); // Ensure items is initialized
+		order.setPayments(Collections.emptyList()); // Ensure payments is initialized
 
-    @Test
-    void testExecute() {
-        OrderResponseDTO result = createOrderService.execute(orderRequestDTO);
+		// Initialize the response DTO
+		orderResponseDTO = OrderMapper.toResponse(order);
 
-        assertNotNull(result);
+		// Stub the usecase method to return the order
+		doReturn(order).when(createOrUpdateOrderUsecase).execute(any(Order.class)); // Use
+																					// 'any(Order.class)'
+																					// to
+																					// match
+																					// any
+																					// Order
+	}
 
-        // Comparar os atributos manualmente
-        assertEquals(orderResponseDTO.getId(), result.getId());
-        assertEquals(orderResponseDTO.getStatus(), result.getStatus());
-        assertEquals(orderResponseDTO.getCreatedDate(), result.getCreatedDate());
-        assertEquals(orderResponseDTO.getUpdatedDate(), result.getUpdatedDate());
-        assertEquals(orderResponseDTO.getTotalPrice(), result.getTotalPrice());
-        // Comparar outros atributos conforme necessário
-        assertEquals(orderResponseDTO.getItems(), result.getItems());
-        assertEquals(orderResponseDTO.getPayment(), result.getPayment());
-        assertEquals(orderResponseDTO.getPerson(), result.getPerson());
-        assertEquals(orderResponseDTO.getAwaitingTime(), result.getAwaitingTime());
-        assertEquals(orderResponseDTO.getKitchenQueue(), result.getKitchenQueue());
+	@Test
+	void testExecute() {
+		OrderResponseDTO result = createOrderService.execute(orderRequestDTO);
 
-        // Verificar se o método foi chamado corretamente
-        verify(createOrUpdateOrderUsecase, times(1)).execute(any(Order.class));
-    }
+		assertNotNull(result);
+
+		// Comparar os atributos manualmente
+		assertEquals(orderResponseDTO.getId(), result.getId());
+		assertEquals(orderResponseDTO.getStatus(), result.getStatus());
+		assertEquals(orderResponseDTO.getCreatedDate(), result.getCreatedDate());
+		assertEquals(orderResponseDTO.getUpdatedDate(), result.getUpdatedDate());
+		assertEquals(orderResponseDTO.getTotalPrice(), result.getTotalPrice());
+		// Comparar outros atributos conforme necessário
+		assertEquals(orderResponseDTO.getItems(), result.getItems());
+		assertEquals(orderResponseDTO.getPayment(), result.getPayment());
+		assertEquals(orderResponseDTO.getPerson(), result.getPerson());
+		assertEquals(orderResponseDTO.getAwaitingTime(), result.getAwaitingTime());
+		assertEquals(orderResponseDTO.getKitchenQueue(), result.getKitchenQueue());
+
+		// Verificar se o método foi chamado corretamente
+		verify(createOrUpdateOrderUsecase, times(1)).execute(any(Order.class));
+	}
 
 }

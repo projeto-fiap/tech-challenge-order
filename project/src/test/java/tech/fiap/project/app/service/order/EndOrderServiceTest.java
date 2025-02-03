@@ -16,40 +16,41 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class EndOrderServiceTest {
 
-    @Mock
-    private EndOrderUseCase endOrderUseCase;
+	@Mock
+	private EndOrderUseCase endOrderUseCase;
 
-    @InjectMocks
-    private EndOrderService endOrderService;
+	@InjectMocks
+	private EndOrderService endOrderService;
 
-    private Long orderId;
+	private Long orderId;
 
-    @BeforeEach
-    public void setUp() {
-        orderId = 1L;
-    }
+	@BeforeEach
+	public void setUp() {
+		orderId = 1L;
+	}
 
-    @Test
-    void testExecuteShouldReturnBufferedImage() {
-        BufferedImage expectedImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
-        when(endOrderUseCase.execute(orderId)).thenReturn(expectedImage);
+	@Test
+	void testExecuteShouldReturnBufferedImage() {
+		BufferedImage expectedImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+		when(endOrderUseCase.execute(orderId)).thenReturn(expectedImage);
 
-        BufferedImage result = endOrderService.execute(orderId);
+		BufferedImage result = endOrderService.execute(orderId);
 
-        assertNotNull(result);
-        assertEquals(expectedImage, result);
+		assertNotNull(result);
+		assertEquals(expectedImage, result);
 
-        verify(endOrderUseCase, times(1)).execute(orderId);
-    }
+		verify(endOrderUseCase, times(1)).execute(orderId);
+	}
 
-    @Test
-    void testExecuteShouldHandleNullImage() {
-        when(endOrderUseCase.execute(orderId)).thenReturn(null);
+	@Test
+	void testExecuteShouldHandleNullImage() {
+		when(endOrderUseCase.execute(orderId)).thenReturn(null);
 
-        BufferedImage result = endOrderService.execute(orderId);
+		BufferedImage result = endOrderService.execute(orderId);
 
-        assertNull(result);
+		assertNull(result);
 
-        verify(endOrderUseCase, times(1)).execute(orderId);
-    }
+		verify(endOrderUseCase, times(1)).execute(orderId);
+	}
+
 }

@@ -21,85 +21,86 @@ import static org.mockito.Mockito.*;
 
 class ItemControllerTest {
 
-    @InjectMocks
-    private ItemController itemController;
+	@InjectMocks
+	private ItemController itemController;
 
-    @Mock
-    private CreateItemService createItemService;
+	@Mock
+	private CreateItemService createItemService;
 
-    @Mock
-    private RetrieveItemService retrieveItemService;
+	@Mock
+	private RetrieveItemService retrieveItemService;
 
-    @Mock
-    private UpdateItemService updateItemService;
+	@Mock
+	private UpdateItemService updateItemService;
 
-    @Mock
-    private DeleteItemService deleteItemService;
+	@Mock
+	private DeleteItemService deleteItemService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+	}
 
-    @Test
-    void testCreateItems() {
-        List<CreateItemRequestDTO> requestDTOs = Collections.singletonList(new CreateItemRequestDTO());
-        List<ItemDTO> responseDTOs = Collections.singletonList(new ItemDTO());
-        when(createItemService.createItem(requestDTOs)).thenReturn(responseDTOs);
+	@Test
+	void testCreateItems() {
+		List<CreateItemRequestDTO> requestDTOs = Collections.singletonList(new CreateItemRequestDTO());
+		List<ItemDTO> responseDTOs = Collections.singletonList(new ItemDTO());
+		when(createItemService.createItem(requestDTOs)).thenReturn(responseDTOs);
 
-        ResponseEntity<List<ItemDTO>> response = itemController.createItems(requestDTOs);
+		ResponseEntity<List<ItemDTO>> response = itemController.createItems(requestDTOs);
 
-        assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(responseDTOs, response.getBody());
-    }
+		assertNotNull(response);
+		assertEquals(200, response.getStatusCodeValue());
+		assertEquals(responseDTOs, response.getBody());
+	}
 
-    @Test
-    void testFindAll() {
-        List<ItemDTO> items = Collections.singletonList(new ItemDTO());
-        when(retrieveItemService.findAll()).thenReturn(items);
+	@Test
+	void testFindAll() {
+		List<ItemDTO> items = Collections.singletonList(new ItemDTO());
+		when(retrieveItemService.findAll()).thenReturn(items);
 
-        ResponseEntity<List<ItemDTO>> response = itemController.findAll();
+		ResponseEntity<List<ItemDTO>> response = itemController.findAll();
 
-        assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(items, response.getBody());
-    }
+		assertNotNull(response);
+		assertEquals(200, response.getStatusCodeValue());
+		assertEquals(items, response.getBody());
+	}
 
-    @Test
-    void testFindByCategory() {
-        String category = "Beverages";
-        List<ItemDTO> items = Collections.singletonList(new ItemDTO());
-        when(retrieveItemService.findByCategory(category)).thenReturn(items);
+	@Test
+	void testFindByCategory() {
+		String category = "Beverages";
+		List<ItemDTO> items = Collections.singletonList(new ItemDTO());
+		when(retrieveItemService.findByCategory(category)).thenReturn(items);
 
-        ResponseEntity<List<ItemDTO>> response = itemController.findByCategory(category);
+		ResponseEntity<List<ItemDTO>> response = itemController.findByCategory(category);
 
-        assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(items, response.getBody());
-    }
+		assertNotNull(response);
+		assertEquals(200, response.getStatusCodeValue());
+		assertEquals(items, response.getBody());
+	}
 
-    @Test
-    void testUpdateItem() {
-        Long id = 1L;
-        ItemDTO itemDTO = new ItemDTO();
-        when(updateItemService.updateItem(id, itemDTO)).thenReturn(itemDTO);
+	@Test
+	void testUpdateItem() {
+		Long id = 1L;
+		ItemDTO itemDTO = new ItemDTO();
+		when(updateItemService.updateItem(id, itemDTO)).thenReturn(itemDTO);
 
-        ResponseEntity<ItemDTO> response = itemController.updateItem(id, itemDTO);
+		ResponseEntity<ItemDTO> response = itemController.updateItem(id, itemDTO);
 
-        assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(itemDTO, response.getBody());
-    }
+		assertNotNull(response);
+		assertEquals(200, response.getStatusCodeValue());
+		assertEquals(itemDTO, response.getBody());
+	}
 
-    @Test
-    void testDeleteItem() {
-        Long id = 1L;
-        doNothing().when(deleteItemService).deleteItem(id);
+	@Test
+	void testDeleteItem() {
+		Long id = 1L;
+		doNothing().when(deleteItemService).deleteItem(id);
 
-        ResponseEntity<Void> response = itemController.deleteItem(id);
+		ResponseEntity<Void> response = itemController.deleteItem(id);
 
-        assertNotNull(response);
-        assertEquals(204, response.getStatusCodeValue());
-    }
+		assertNotNull(response);
+		assertEquals(204, response.getStatusCodeValue());
+	}
+
 }

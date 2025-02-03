@@ -20,51 +20,52 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class CheckoutOrderServiceTest {
 
-    @Mock
-    private RetrieveOrderUseCase retrieveOrderUseCase;
+	@Mock
+	private RetrieveOrderUseCase retrieveOrderUseCase;
 
-    @InjectMocks
-    private CheckoutOrderService checkoutOrderService;
+	@InjectMocks
+	private CheckoutOrderService checkoutOrderService;
 
-    private Order order;
+	private Order order;
 
-    @BeforeEach
-    void setUp() {
-        order = new Order();
-        order.setId(1L);
-        order.setStatus(OrderStatus.PAID);
-        order.setItems(List.of()); // Inicializa a lista de items
-        order.setPayments(List.of()); // Inicializa a lista de payments
-    }
+	@BeforeEach
+	void setUp() {
+		order = new Order();
+		order.setId(1L);
+		order.setStatus(OrderStatus.PAID);
+		order.setItems(List.of()); // Inicializa a lista de items
+		order.setPayments(List.of()); // Inicializa a lista de payments
+	}
 
-    @Test
-    void testExecuteOrderFoundAndPaid() {
-        when(retrieveOrderUseCase.findByIdWithPayment(1L)).thenReturn(Optional.of(order));
+	@Test
+	void testExecuteOrderFoundAndPaid() {
+		when(retrieveOrderUseCase.findByIdWithPayment(1L)).thenReturn(Optional.of(order));
 
-        Optional<OrderResponseDTO> result = checkoutOrderService.execute(1L);
+		Optional<OrderResponseDTO> result = checkoutOrderService.execute(1L);
 
-        assertTrue(result.isPresent());
-        verify(retrieveOrderUseCase, times(1)).findByIdWithPayment(1L);
-    }
+		assertTrue(result.isPresent());
+		verify(retrieveOrderUseCase, times(1)).findByIdWithPayment(1L);
+	}
 
-    @Test
-    void testExecuteOrderNotFound() {
-        when(retrieveOrderUseCase.findByIdWithPayment(1L)).thenReturn(Optional.empty());
+	@Test
+	void testExecuteOrderNotFound() {
+		when(retrieveOrderUseCase.findByIdWithPayment(1L)).thenReturn(Optional.empty());
 
-        Optional<OrderResponseDTO> result = checkoutOrderService.execute(1L);
+		Optional<OrderResponseDTO> result = checkoutOrderService.execute(1L);
 
-        assertFalse(result.isPresent());
-        verify(retrieveOrderUseCase, times(1)).findByIdWithPayment(1L);
-    }
+		assertFalse(result.isPresent());
+		verify(retrieveOrderUseCase, times(1)).findByIdWithPayment(1L);
+	}
 
-    @Test
-    void testExecuteOrderNotPaid() {
-        order.setStatus(OrderStatus.PENDING); // Simulando um status diferente de "PAID"
-        when(retrieveOrderUseCase.findByIdWithPayment(1L)).thenReturn(Optional.of(order));
+	@Test
+	void testExecuteOrderNotPaid() {
+		order.setStatus(OrderStatus.PENDING); // Simulando um status diferente de "PAID"
+		when(retrieveOrderUseCase.findByIdWithPayment(1L)).thenReturn(Optional.of(order));
 
-        Optional<OrderResponseDTO> result = checkoutOrderService.execute(1L);
+		Optional<OrderResponseDTO> result = checkoutOrderService.execute(1L);
 
-        assertFalse(result.isPresent());
-        verify(retrieveOrderUseCase, times(1)).findByIdWithPayment(1L);
-    }
+		assertFalse(result.isPresent());
+		verify(retrieveOrderUseCase, times(1)).findByIdWithPayment(1L);
+	}
+
 }

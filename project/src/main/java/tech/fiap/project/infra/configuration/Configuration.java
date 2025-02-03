@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 import tech.fiap.project.domain.dataprovider.ItemDataProvider;
 
 import tech.fiap.project.domain.dataprovider.OrderDataProvider;
@@ -96,10 +97,14 @@ public class Configuration {
 	@Bean
 	public CreateOrUpdateOrderUseCaseImpl createOrUpdateOrderUseCaseImpl(
 			InitializeItemUseCase initializeItemUseCaseImpl, OrderDataProvider orderDataProvider,
-			// InitializePersonUseCase initializePersonUseCase,
-			CalculateTotalOrderUseCaseImpl calculateTotalOrderUseCase) {
-		return new CreateOrUpdateOrderUseCaseImpl(orderDataProvider, // initializePersonUseCase,
-				initializeItemUseCaseImpl, calculateTotalOrderUseCase);
+			RestTemplate restTemplate, CalculateTotalOrderUseCaseImpl calculateTotalOrderUseCase) {
+		return new CreateOrUpdateOrderUseCaseImpl(orderDataProvider, restTemplate, initializeItemUseCaseImpl,
+				calculateTotalOrderUseCase);
+	}
+
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
 	}
 
 }

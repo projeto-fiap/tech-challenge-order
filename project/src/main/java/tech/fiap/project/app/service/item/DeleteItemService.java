@@ -13,7 +13,8 @@ public class DeleteItemService {
 	public void deleteItem(Long id) {
 		if (id != null) {
 			deleteItemUseCase.execute(id);
-		} else {
+		}
+		else {
 			throw new IllegalArgumentException("ID cannot be null");
 		}
 	}

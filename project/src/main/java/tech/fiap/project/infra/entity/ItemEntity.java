@@ -3,7 +3,6 @@ package tech.fiap.project.infra.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
 import java.math.BigDecimal;
 import java.util.List;
 
