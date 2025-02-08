@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
@@ -34,6 +35,12 @@ import java.text.SimpleDateFormat;
 @ComponentScan("tech.fiap.project")
 @Setter
 public class Configuration {
+
+	@Value("${tech-challenge.orders.base-url}")
+	String ordersBaseUrl;
+
+	@Value("${keycloak.base-url}")
+	String keycloakBaseUrl;
 
 	@Bean
 	public ObjectMapper objectMapper() {
