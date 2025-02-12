@@ -16,6 +16,11 @@ public class UpdateItemService {
 	public ItemDTO updateItem(Long id, ItemDTO itemDTO) {
 		Item item = ItemMapper.toDomain(itemDTO);
 		Item updatedItem = updateItemUseCase.execute(id, item);
+
+		if (updatedItem == null) {
+			return null;
+		}
+
 		return ItemMapper.toDTO(updatedItem);
 	}
 

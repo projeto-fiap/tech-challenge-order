@@ -1,6 +1,7 @@
 package tech.fiap.project.infra.dataprovider;
 
 import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import tech.fiap.project.domain.dataprovider.ItemDataProvider;
 import tech.fiap.project.domain.entity.Item;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+
 public class ItemDataProviderImpl implements ItemDataProvider {
 
 	private final ItemRepository itemRepository;

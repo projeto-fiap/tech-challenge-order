@@ -4,6 +4,7 @@ import tech.fiap.project.domain.dataprovider.ItemDataProvider;
 import tech.fiap.project.domain.entity.Item;
 import tech.fiap.project.domain.usecase.item.RetrieveItemUseCase;
 import tech.fiap.project.infra.entity.ItemCategory;
+import tech.fiap.project.infra.exception.ItemNotFound;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,11 @@ public class RetrieveItemUseCaseImpl implements RetrieveItemUseCase {
 
 	@Override
 	public Optional<Item> findById(Long id) {
-		return itemDataProvider.retrieveById(id);
+		Optional<Item> item = itemDataProvider.retrieveById(id);
+		if (item.isEmpty()) {
+			throw new ItemNotFound(id);
+		}
+		return item;
 	}
 
 	@Override

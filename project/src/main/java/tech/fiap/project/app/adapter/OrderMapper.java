@@ -1,7 +1,6 @@
 package tech.fiap.project.app.adapter;
 
 import tech.fiap.project.app.dto.*;
-import tech.fiap.project.domain.entity.Kitchen;
 import tech.fiap.project.domain.entity.Order;
 
 import java.time.LocalDateTime;
@@ -18,15 +17,15 @@ public class OrderMapper {
 		return orders.stream().map(OrderMapper::toDTO).toList();
 	}
 
-	public static List<OrderResponseDTO> toDTO(List<Order> orders, List<Kitchen> kitchens) {
+	public static List<OrderResponseDTO> toDTO(List<Order> orders, List<KitchenDTO> kitchens) {
 		return orders.stream().map(order -> {
-			Optional<Kitchen> kitchen = kitchens.stream()
+			Optional<KitchenDTO> kitchen = kitchens.stream()
 					.filter(kitchen1 -> Objects.equals(kitchen1.getOrderId(), order.getId())).findFirst();
 			return toDTO(order, kitchen);
 		}).toList();
 	}
 
-	public static OrderResponseDTO toDTO(Order order, Optional<Kitchen> kitchen) {
+	public static OrderResponseDTO toDTO(Order order, Optional<KitchenDTO> kitchen) {
 		PersonDTO person = null;
 		if (order.getPerson() != null) {
 			person = order.getPerson();
@@ -62,7 +61,7 @@ public class OrderMapper {
 		orderResponseDTO.setPerson(person);
 		orderResponseDTO.setAwaitingTime(order.getAwaitingTime());
 		orderResponseDTO.setTotalPrice(order.getTotalPrice());
-		kitchen.ifPresent(value -> orderResponseDTO.setKitchenQueue(KitchenMapper.toDTO(value)));
+		kitchen.ifPresent(value -> orderResponseDTO.setKitchenQueue(value));
 		return orderResponseDTO;
 	}
 

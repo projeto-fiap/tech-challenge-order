@@ -4,6 +4,7 @@ import tech.fiap.project.domain.dataprovider.ItemDataProvider;
 import tech.fiap.project.domain.entity.Item;
 import tech.fiap.project.domain.entity.Order;
 import tech.fiap.project.domain.usecase.item.InitializeItemUseCase;
+import tech.fiap.project.infra.exception.ItemNotFound;
 import tech.fiap.project.infra.exception.NullIdException;
 
 import java.util.ArrayList;

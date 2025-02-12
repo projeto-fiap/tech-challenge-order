@@ -11,17 +11,18 @@ import java.util.concurrent.atomic.AtomicReference;
 public class CalculateTotalOrderUseCaseImpl implements CalculateTotalOrderUseCase {
 
 	public BigDecimal execute(List<Item> items) {
-		AtomicReference<List<Item>> newItens = new AtomicReference<>(new ArrayList<>());
+		AtomicReference<List<Item>> allItems = new AtomicReference<>(new ArrayList<>());
 		items.forEach(item -> {
+
 			if (item.getIngredients() != null) {
-				newItens.getAndAccumulate(buildListIngredients(item.getIngredients()), (list, ingredients) -> {
+				allItems.getAndAccumulate(buildListIngredients(item.getIngredients()), (list, ingredients) -> {
 					list.addAll(ingredients);
 					return list;
 				});
 			}
-			newItens.get().add(item);
+			allItems.get().add(item);
 		});
-		return calculate(newItens.get());
+		return calculate(allItems.get());
 	}
 
 	private static BigDecimal calculate(List<Item> items) {
@@ -29,17 +30,17 @@ public class CalculateTotalOrderUseCaseImpl implements CalculateTotalOrderUseCas
 				BigDecimal::add);
 	}
 
-	private List<Item> buildListIngredients(List<Item> items) {
-		List<Item> ingredients = new ArrayList<>();
-		items.forEach(item -> {
-			if (item.getIngredients() != null && !item.getIngredients().isEmpty()) {
-				buildListIngredients(item.getIngredients());
+	private List<Item> buildListIngredients(List<Item> ingredients) {
+		List<Item> allIngredients = new ArrayList<>();
+		ingredients.forEach(ingredient -> {
+			if (ingredient.getIngredients() != null && !ingredient.getIngredients().isEmpty()) {
+				allIngredients.addAll(buildListIngredients(ingredient.getIngredients()));
 			}
 			else {
-				ingredients.add(item);
+				allIngredients.add(ingredient);
 			}
 		});
-		return ingredients;
+		return allIngredients;
 	}
 
 }

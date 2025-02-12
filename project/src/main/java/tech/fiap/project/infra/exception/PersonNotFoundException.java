@@ -1,13 +1,13 @@
 package tech.fiap.project.infra.exception;
 
 import org.springframework.http.HttpStatus;
-import tech.fiap.project.domain.entity.Person;
+import tech.fiap.project.app.dto.PersonDTO;
 
 import java.util.Optional;
 
 public class PersonNotFoundException extends BusinessException {
 
-	public PersonNotFoundException(Person person) {
+	public PersonNotFoundException(PersonDTO person) {
 		super("person.not.found", HttpStatus.NOT_FOUND, person, person.getId().toString());
 	}
 

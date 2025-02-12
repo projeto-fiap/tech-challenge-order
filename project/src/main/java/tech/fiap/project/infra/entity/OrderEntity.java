@@ -1,6 +1,5 @@
 package tech.fiap.project.infra.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
