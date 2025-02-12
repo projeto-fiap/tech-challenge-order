@@ -1,8 +1,12 @@
 package tech.fiap.project.infra.mapper;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import tech.fiap.project.app.dto.PersonDTO;
 import tech.fiap.project.domain.entity.Order;
@@ -12,19 +16,26 @@ import tech.fiap.project.infra.entity.OrderEntity;
 
 import java.util.List;
 
+@Component
 public class OrderRepositoryMapper {
 
-	private static final String PERSON_SERVICE_URL = "http://url-do-servico-de-pessoas/";
+	@Value("${tech-challenge.person.url}")
+	String personUrl;
+
+	private String pathUrl = "/api/v1/person/";
+
+	@Value("${tech-challenge.order.client-id}")
+	String orderClientId;
+
+	@Value("${tech-challenge.order.client-secret}")
+	String orderClientSecret;
+
 
 	private OrderRepositoryMapper() {
 	}
 
-	public static List<Order> toDomain(List<OrderEntity> orders) {
-		return orders.stream().map(OrderRepositoryMapper::toDomain).toList();
-	}
-
-	public static List<OrderEntity> toEntity(List<Order> orders) {
-		return orders.stream().map(OrderRepositoryMapper::toEntity).toList();
+	public List<Order> toDomain(List<OrderEntity> orders) {
+		return orders.stream().map(this::toDomain).toList();
 	}
 
 	public static OrderEntity toEntity(Order order) {
@@ -52,7 +63,7 @@ public class OrderRepositoryMapper {
 		return orderEntity;
 	}
 
-	public static Order toDomain(OrderEntity orderEntity) {
+	public Order toDomain(OrderEntity orderEntity) {
 		if (orderEntity == null) {
 			return null;
 		}
@@ -60,10 +71,15 @@ public class OrderRepositoryMapper {
 		PersonDTO personDto = null;
 		if (orderEntity.getPersonId() != null) {
 			RestTemplate restTemplate = new RestTemplate();
-			ResponseEntity<PersonDTO> response = restTemplate.exchange(PERSON_SERVICE_URL + orderEntity.getPersonId(),
-					HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+			headers.setBasicAuth(orderClientId, orderClientSecret);
+			HttpEntity<Void> entity = new HttpEntity<>(headers);
+			ResponseEntity<PersonDTO> response = restTemplate.exchange(personUrl + pathUrl + orderEntity.getPersonId(),
+					HttpMethod.GET, entity, new ParameterizedTypeReference<>() {
 					});
 			personDto = response.getBody();
+			personDto.setPassword(null);
 		}
 
 		List<Item> domainItems = orderEntity.getItems() != null

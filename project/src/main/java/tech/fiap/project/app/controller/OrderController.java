@@ -25,8 +25,6 @@ public class OrderController {
 
 	private CheckoutOrderService checkoutOrderService;
 
-	// private KitchenService kitchenService;
-
 	private DeliverOrderService deliverOrderService;
 
 	@PostMapping
@@ -51,17 +49,11 @@ public class OrderController {
 		return ResponseEntity.ok(qrcode);
 	}
 
-	// @PutMapping(value = "/checkout/{id}")
-	// public ResponseEntity<OrderResponseDTO> checkout(@PathVariable Long id) {
-	// Optional<OrderResponseDTO> paidOrder = checkoutOrderService.execute(id);
-	// if (paidOrder.isPresent()) {
-	// Optional<KitchenDTO> kitchenQueue = kitchenService.create(paidOrder.get());
-	// kitchenQueue.ifPresent(kitchenDTO ->
-	// paidOrder.get().setKitchenQueue(kitchenDTO));
-	// return paidOrder.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-	// }
-	// return ResponseEntity.notFound().build();
-	// }
+	 @PutMapping(value = "/checkout/{id}")
+	 public ResponseEntity<OrderResponseDTO> checkout(@PathVariable Long id) {
+	 	Optional<OrderResponseDTO> paidOrder = checkoutOrderService.execute(id);
+		 return paidOrder.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+	 }
 
 	@GetMapping(value = "/ongoing/orders")
 	public ResponseEntity<List<OrderResponseDTO>> ongoingOrders() {

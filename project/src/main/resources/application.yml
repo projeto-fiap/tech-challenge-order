@@ -6,7 +6,7 @@ spring:
     name: project
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=public
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=orders
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -63,3 +63,14 @@ springdoc:
     path: /swagger-ui.html
     operationsSorter: method
     tagsSorter: alpha
+
+tech-challenge:
+  person:
+    url: http://localhost:8080
+  order:
+    client-id: 1234567890
+    client-secret: developer
+  payments:
+    url: http://localhost:8081
+    client-id: tech-challenge-payments
+    client-secret: "**********"

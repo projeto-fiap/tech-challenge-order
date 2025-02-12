@@ -13,18 +13,18 @@ import org.springframework.web.client.RestTemplate;
 import tech.fiap.project.domain.dataprovider.ItemDataProvider;
 
 import tech.fiap.project.domain.dataprovider.OrderDataProvider;
+import tech.fiap.project.domain.usecase.CreateQrCodeUseCase;
+import tech.fiap.project.domain.usecase.impl.CreateQrCodeUseCaseImpl;
 import tech.fiap.project.domain.usecase.impl.item.*;
 
-import tech.fiap.project.domain.usecase.impl.order.CalculateTotalOrderUseCaseImpl;
+import tech.fiap.project.domain.usecase.impl.order.*;
 
-import tech.fiap.project.domain.usecase.impl.order.DeliverOrderUseCaseImpl;
-import tech.fiap.project.domain.usecase.impl.order.EndOrderUseCaseImpl;
-import tech.fiap.project.domain.usecase.impl.order.RetrieveOrderUseCaseImpl;
 import tech.fiap.project.domain.usecase.item.DeleteItemUseCase;
 import tech.fiap.project.domain.usecase.item.InitializeItemUseCase;
 import tech.fiap.project.domain.usecase.order.CreateOrUpdateOrderUseCase;
 import tech.fiap.project.domain.usecase.order.DeliverOrderUseCase;
 import tech.fiap.project.domain.usecase.order.EndOrderUseCase;
+import tech.fiap.project.domain.usecase.order.UpdateOrderUseCase;
 
 import java.awt.image.BufferedImage;
 import java.text.DateFormat;
@@ -36,11 +36,26 @@ import java.text.SimpleDateFormat;
 @Setter
 public class Configuration {
 
-	@Value("${tech-challenge.orders.base-url}")
-	String ordersBaseUrl;
-
 	@Value("${keycloak.base-url}")
 	String keycloakBaseUrl;
+
+	@Value("${tech-challenge.order.client-id}")
+	String orderClientId;
+
+	@Value("${tech-challenge.order.client-secret}")
+	String orderClientSecret;
+
+	@Value("${tech-challenge.person.url}")
+	String personUrl;
+
+	@Value("${tech-challenge.payments.url}")
+	String paymentsUrl;
+
+	@Value("${tech-challenge.payments.client-id}")
+	String paymentsClientId;
+
+	@Value("${tech-challenge.payments.client-secret}")
+	String paymentsClientSecret;
 
 	@Bean
 	public ObjectMapper objectMapper() {
@@ -94,10 +109,8 @@ public class Configuration {
 
 	@Bean
 	public EndOrderUseCase endOrderUseCase(CreateOrUpdateOrderUseCase createOrUpdateOrderUseCase,
-			RetrieveOrderUseCaseImpl retrieveOrderUseCase // CreateQrCodeUseCase
-															// createQrCodeUseCase
-	) {
-		return new EndOrderUseCaseImpl(createOrUpdateOrderUseCase, retrieveOrderUseCase // createQrCodeUseCase
+			RetrieveOrderUseCaseImpl retrieveOrderUseCase, CreateQrCodeUseCase createQrCodeUseCase) {
+		return new EndOrderUseCaseImpl(createOrUpdateOrderUseCase, retrieveOrderUseCase ,createQrCodeUseCase
 		);
 	}
 
@@ -105,13 +118,25 @@ public class Configuration {
 	public CreateOrUpdateOrderUseCaseImpl createOrUpdateOrderUseCaseImpl(
 			InitializeItemUseCase initializeItemUseCaseImpl, OrderDataProvider orderDataProvider,
 			RestTemplate restTemplate, CalculateTotalOrderUseCaseImpl calculateTotalOrderUseCase) {
-		return new CreateOrUpdateOrderUseCaseImpl(orderDataProvider, restTemplate, initializeItemUseCaseImpl,
-				calculateTotalOrderUseCase);
+		return new CreateOrUpdateOrderUseCaseImpl(orderDataProvider, restTemplate, personUrl,initializeItemUseCaseImpl,
+				calculateTotalOrderUseCase,orderClientId, orderClientSecret);
 	}
 
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
+	}
+
+	@Bean
+	public UpdateOrderUseCase updateOrderUseCase(OrderDataProvider orderDataProvider) {
+		return new UpdateOrderUseCaseImpl(orderDataProvider);
+	}
+
+	@Bean
+	public CreateQrCodeUseCaseImpl createQrCodeUseCase(RestTemplate restTemplatePayments,
+													   RestTemplate restTemplateKeycloak) {
+		return new CreateQrCodeUseCaseImpl(restTemplatePayments, restTemplateKeycloak,paymentsUrl, keycloakBaseUrl,
+				paymentsClientId, paymentsClientSecret);
 	}
 
 }
