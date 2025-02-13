@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="gabriel.oliveira">
+        <!-- Criação da tabela de pedido -->
+        <createTable tableName="order">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_date" type="timestamp"/>
+            <column name="total_price" type="decimal(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="awaiting_time" type="decimal(10,2)"/>
+            <column name="person_id" type="bigint"/> <!-- Adicionando referência ao ID de PersonEntity -->
+        </createTable>
+
+        <!-- Criação da tabela de item -->
+        <createTable tableName="item">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="decimal(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit" type="varchar(255)"/>
+            <column name="fk_order" type="bigint"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Criação da tabela de relacionamento para IDs de pagamento -->
+    <changeSet id="2" author="gabriel.oliveira">
+        <createTable tableName="order_payment_ids">
+            <column name="order_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="order_payment_ids"
+                baseColumnNames="order_id"
+                constraintName="fk_order_payment_order"
+                referencedTableName="order"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <!-- Adicionando chave estrangeira na tabela item -->
+    <changeSet id="3" author="gabriel.oliveira">
+        <addForeignKeyConstraint
+                baseTableName="item"
+                baseColumnNames="fk_order"
+                constraintName="fk_order_id"
+                referencedTableName="order"
+                referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

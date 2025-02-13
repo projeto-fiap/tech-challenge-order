@@ -1,0 +1,76 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: project
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=orders
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    change-log: classpath:db.changelog/db.changelog-master.xml
+    drop-first: true
+    enabled: true
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        show_sql: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: tech-challenge-payments
+            client-secret: ${KEYCLOAK_CLIENT_SECRET} # Melhor usar variável de ambiente
+            authorization-grant-type: client_credentials
+            scope: openid, profile, email
+            redirect-uri: ${KEYCLOAK_BASE_URL}/login/oauth2/code/keycloak
+            client-name: Pagamentos
+        provider:
+          keycloak:
+            token-uri: ${KEYCLOAK_BASE_URL}/realms/master/protocol/openid-connect/token
+            authorization-uri: ${KEYCLOAK_BASE_URL}/realms/master/protocol/openid-connect/auth
+            user-info-uri: ${KEYCLOAK_BASE_URL}/realms/master/protocol/openid-connect/userinfo
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_BASE_URL}/realms/master
+
+  main:
+    allow-bean-definition-overriding: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    root: INFO
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+
+tech-challenge:
+  person:
+    url: http://localhost:8080
+  order:
+    client-id: 1234567890
+    client-secret: developer
+  payments:
+    url: http://localhost:8081
+    client-id: tech-challenge-payments
+    client-secret: "**********"
