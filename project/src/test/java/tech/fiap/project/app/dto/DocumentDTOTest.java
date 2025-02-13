@@ -5,7 +5,7 @@ import tech.fiap.project.domain.entity.DocumentType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DocumentDTOTest {
+class  DocumentDTOTest {
 
     @Test
     void testDocumentDTOConstructorAndGetters() {

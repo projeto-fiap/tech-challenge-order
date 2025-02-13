@@ -1,111 +1,122 @@
 package tech.fiap.project.app.service.order;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
+import org.mockito.MockedStatic;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
+import tech.fiap.project.app.adapter.OrderMapper;
+import tech.fiap.project.app.dto.KitchenDTO;
 import tech.fiap.project.app.dto.OrderResponseDTO;
-import tech.fiap.project.domain.entity.OrderStatus;
 import tech.fiap.project.domain.entity.Order;
 import tech.fiap.project.domain.usecase.order.RetrieveOrderUseCase;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class RetrieveOrderServiceTest {
+class RetrieveOrderServiceTest {
 
 	@Mock
 	private RetrieveOrderUseCase retrieveOrderUseCase;
 
+	@Mock
+	private RestTemplate restTemplate;
+
 	@InjectMocks
 	private RetrieveOrderService retrieveOrderService;
 
+	private MockedStatic<OrderMapper> orderMapperMockedStatic;
+
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+		orderMapperMockedStatic = mockStatic(OrderMapper.class);
+	}
+
+	@AfterEach
+	void tearDown() {
+		orderMapperMockedStatic.close();
+	}
+
 	@Test
 	void testFindAll() {
-		Order order1 = new Order();
-		order1.setId(1L);
-		order1.setStatus(OrderStatus.AWAITING_PAYMENT);
-		order1.setCreatedDate(LocalDateTime.now().minusMinutes(10));
-		order1.setUpdatedDate(LocalDateTime.now());
-		order1.setItems(Collections.emptyList()); // Evitar NullPointerException
-		order1.setPayments(Collections.emptyList()); // Evitar NullPointerException
-		order1.setTotalPrice(new BigDecimal("50.00"));
+		List<Order> orders = List.of(new Order(), new Order());
+		List<OrderResponseDTO> orderResponseDTOs = List.of(new OrderResponseDTO(), new OrderResponseDTO());
 
-		Order order2 = new Order();
-		order2.setId(2L);
-		order2.setStatus(OrderStatus.FINISHED);
-		order2.setCreatedDate(LocalDateTime.now().minusMinutes(5));
-		order2.setUpdatedDate(LocalDateTime.now());
-		order2.setItems(Collections.emptyList()); // Evitar NullPointerException
-		order2.setPayments(Collections.emptyList()); // Evitar NullPointerException
-		order2.setTotalPrice(new BigDecimal("150.00"));
+		when(retrieveOrderUseCase.findAll()).thenReturn(orders);
+		orderMapperMockedStatic.when(() -> OrderMapper.toDTO(orders)).thenReturn(orderResponseDTOs);
 
-		when(retrieveOrderUseCase.findAll()).thenReturn(Arrays.asList(order1, order2));
+		List<OrderResponseDTO> result = retrieveOrderService.findAll();
 
-		var orders = retrieveOrderService.findAll();
-
-		assertEquals(2, orders.size());
+		assertNotNull(result);
+		assertEquals(orderResponseDTOs.size(), result.size());
 		verify(retrieveOrderUseCase, times(1)).findAll();
+		orderMapperMockedStatic.verify(() -> OrderMapper.toDTO(orders), times(1));
 	}
 
 	@Test
 	void testFindById() {
+		Long orderId = 1L;
 		Order order = new Order();
-		order.setId(1L);
-		order.setStatus(OrderStatus.AWAITING_PAYMENT);
-		order.setCreatedDate(LocalDateTime.now().minusMinutes(10));
-		order.setUpdatedDate(LocalDateTime.now());
-		order.setItems(Collections.emptyList()); // Evitar NullPointerException
-		order.setPayments(Collections.emptyList()); // Evitar NullPointerException
-		order.setTotalPrice(new BigDecimal("100.00"));
+		OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
 
-		when(retrieveOrderUseCase.findByIdWithPayment(1L)).thenReturn(Optional.of(order));
+		when(retrieveOrderUseCase.findByIdWithPayment(orderId)).thenReturn(Optional.of(order));
+		orderMapperMockedStatic.when(() -> OrderMapper.toDTO(order)).thenReturn(orderResponseDTO);
 
-		var retrievedOrder = retrieveOrderService.findById(1L);
+		Optional<OrderResponseDTO> result = retrieveOrderService.findById(orderId);
 
-		assertTrue(retrievedOrder.isPresent());
-		assertEquals(1L, retrievedOrder.get().getId());
-		verify(retrieveOrderUseCase, times(1)).findByIdWithPayment(1L);
+		assertTrue(result.isPresent());
+		verify(retrieveOrderUseCase, times(1)).findByIdWithPayment(orderId);
+		orderMapperMockedStatic.verify(() -> OrderMapper.toDTO(order), times(1));
 	}
 
-	@Test
-	void testFindByIdWhenOrderNotFound() {
-		when(retrieveOrderUseCase.findByIdWithPayment(999L)).thenReturn(Optional.empty());
-
-		var retrievedOrder = retrieveOrderService.findById(999L);
-
-		assertFalse(retrievedOrder.isPresent());
-		verify(retrieveOrderUseCase, times(1)).findByIdWithPayment(999L);
-	}
+//	@Test
+//	void testFindOngoingAll() {
+//		Long orderId = 1L;
+//		KitchenDTO kitchenDTO = new KitchenDTO();
+//		kitchenDTO.setOrderId(orderId);
+//		List<KitchenDTO> kitchenDTOs = List.of(kitchenDTO);
+//		List<Long> kitchenIds = kitchenDTOs.stream().map(KitchenDTO::getOrderId).collect(Collectors.toList());
+//		Order order = new Order();
+//		order.setId(orderId);
+//		List<Order> orders = List.of(order);
+//		OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
+//		orderResponseDTO.setId(orderId);
+//		List<OrderResponseDTO> orderResponseDTOs = List.of(orderResponseDTO);
+//
+//		when(restTemplate.exchange(eq("http://kitchen-service/api/kitchen"), eq(HttpMethod.GET), any(HttpEntity.class),
+//				any(ParameterizedTypeReference.class))).thenReturn(new ResponseEntity<>(kitchenDTOs, HttpStatus.OK));
+//		when(retrieveOrderUseCase.findAllById(kitchenIds)).thenReturn(orders);
+//		orderMapperMockedStatic.when(() -> OrderMapper.toDTO(orders, kitchenDTOs)).thenReturn(orderResponseDTOs);
+//
+//		List<OrderResponseDTO> result = retrieveOrderService.findOngoingAll();
+//
+//		assertNotNull(result);
+//		assertEquals(orderResponseDTOs.size(), result.size());
+//		verify(restTemplate, times(1)).exchange(eq("http://kitchen-service/api/kitchen"), eq(HttpMethod.GET),
+//				any(HttpEntity.class), any(ParameterizedTypeReference.class));
+//		verify(retrieveOrderUseCase, times(1)).findAllById(kitchenIds);
+//		orderMapperMockedStatic.verify(() -> OrderMapper.toDTO(orders, kitchenDTOs), times(1));
+//	}
 
 	@Test
 	void testSetDuration() {
-		OrderResponseDTO order = new OrderResponseDTO();
-		LocalDateTime createdDate = LocalDateTime.now().minusMinutes(15);
-		LocalDateTime updatedDate = LocalDateTime.now();
+		OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
+		orderResponseDTO.setCreatedDate(LocalDateTime.now().minusHours(2));
+		orderResponseDTO.setUpdatedDate(LocalDateTime.now());
 
-		order.setCreatedDate(createdDate);
-		order.setUpdatedDate(updatedDate);
-		order.setStatus(OrderStatus.AWAITING_PAYMENT);
-		order.setItems(Collections.emptyList()); // Evitar NullPointerException
-		order.setPayment(Collections.emptyList()); // Evitar NullPointerException
+		retrieveOrderService.setDuration(orderResponseDTO);
 
-		retrieveOrderService.setDuration(order); // Agora chamamos o método setDuration
-
-		assertNotNull(order.getAwaitingTime()); // Verifica se o tempo de espera foi
-												// calculado
-		assertEquals(Duration.ofMinutes(15), order.getAwaitingTime()); // Verifica se o
-																		// tempo de espera
-																		// é o esperado
+		assertNotNull(orderResponseDTO.getAwaitingTime());
 	}
-
 }

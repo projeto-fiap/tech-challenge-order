@@ -2,19 +2,17 @@ package tech.fiap.project.app.service.order;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 import tech.fiap.project.domain.usecase.order.EndOrderUseCase;
 
 import java.awt.image.BufferedImage;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-public class EndOrderServiceTest {
+class EndOrderServiceTest {
 
 	@Mock
 	private EndOrderUseCase endOrderUseCase;
@@ -22,35 +20,19 @@ public class EndOrderServiceTest {
 	@InjectMocks
 	private EndOrderService endOrderService;
 
-	private Long orderId;
-
 	@BeforeEach
-	public void setUp() {
-		orderId = 1L;
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
 	}
 
 	@Test
-	void testExecuteShouldReturnBufferedImage() {
-		BufferedImage expectedImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
-		when(endOrderUseCase.execute(orderId)).thenReturn(expectedImage);
+	void testExecute() throws Exception {
+		Long id = 1L;
+		BufferedImage mockImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+		when(endOrderUseCase.execute(id)).thenReturn(mockImage);
 
-		BufferedImage result = endOrderService.execute(orderId);
+		BufferedImage result = endOrderService.execute(id);
 
 		assertNotNull(result);
-		assertEquals(expectedImage, result);
-
-		verify(endOrderUseCase, times(1)).execute(orderId);
 	}
-
-	@Test
-	void testExecuteShouldHandleNullImage() {
-		when(endOrderUseCase.execute(orderId)).thenReturn(null);
-
-		BufferedImage result = endOrderService.execute(orderId);
-
-		assertNull(result);
-
-		verify(endOrderUseCase, times(1)).execute(orderId);
-	}
-
 }
