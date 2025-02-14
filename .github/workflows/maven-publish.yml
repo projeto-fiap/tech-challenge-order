@@ -63,7 +63,7 @@ jobs:
       - name: Unit Tests
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn '-Dtest=!tech.integration.order.**' test org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DsonarToken=$SONAR_TOKEN
+        run: mvn  '-Dtest=!tech.integration.fiap.**' test org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DsonarToken=$SONAR_TOKEN
 
   integrated-tests:
     name: Integrated Tests
@@ -89,40 +89,10 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Integrated Tests
+      - name: Unit Tests
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn '-Dtest=tech.integration.order.**' test
-
-  bdd-tests:
-    name: BDD Tests
-    runs-on: ubuntu-latest
-    needs: unit-tests
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install Java and Maven
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'adopt'
-          cache: maven
-
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
-      - name: Run BDD Tests
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn test '-Dtest=tech.features.RunCucumberTest'
-
+        run: mvn  '-Dtest=tech.integration.fiap.**' test
   analysis-sonarqube:
     name: Quality Gate
     runs-on: ubuntu-latest
@@ -130,17 +100,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for better analysis
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Sonar Build Breaker
         env:
           GITHUB_REF_NAME: ${{ github.ref_name }}
         uses: jkumar19/sonar-build-breaker@v1.0.0
         with:
           sonar_url: "https://sonarcloud.io"
-          sonar_branch: ${{ github.ref_name }}
+          sonar_branch: ${{ env.GITHUB_REF_NAME }}
           sonar_token: ${{ secrets.SONAR_TOKEN }}
           project_key: "projeto-fiap_tech-challenge-order"
-
   send-docker-hub:
     name: Deploy PRD
     runs-on: ubuntu-latest
@@ -154,11 +123,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-      - name: Clone Repository and Build Docker Image
-        run: git clone https://github.com/projeto-fiap/ms-order.git && cd ms-order && docker build . -t matheuspatricio0/ms-order:latest
+      - name: Clone Repository
+        run: git clone https://github.com/projeto-fiap/tech-challenge-order.git && cd tech-challenge-order && docker build . -t matheuspatricio0/projeto-fiap-order:latest
       - name: Push Docker image
-        run: docker push matheuspatricio0/ms-order:latest
-
+        run: docker push matheuspatricio0/projeto-fiap-order:latest
   deploy-dev:
     runs-on: ubuntu-latest
     environment:
@@ -166,6 +134,7 @@ jobs:
     needs:
       - analysis-sonarqube
       - integrated-tests
+
     if: github.ref == 'refs/heads/develop'
     steps:
       - name: Deploy
@@ -180,6 +149,7 @@ jobs:
     needs:
       - analysis-sonarqube
       - integrated-tests
+
     if: github.ref == 'refs/heads/release'
     steps:
       - name: Deploy
