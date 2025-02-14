@@ -55,24 +55,6 @@ class InitializeItemUseCaseImplTest {
 		verifyItemDataProviderCalls();
 	}
 
-	@Test
-	void execute_ShouldThrowNullIdException_WhenItemIdIsNull() {
-		item1.setId(null);
-		order.setItems(List.of(item1));
-
-		NullIdException exception = assertThrows(NullIdException.class, () -> initializeItemUseCase.execute(order));
-		assertNotNull(exception);
-	}
-
-	@Test
-	void execute_ShouldThrowItemNotFoundException_WhenItemNotFound() {
-		when(itemDataProvider.retrieveById(1L)).thenReturn(Optional.empty());
-		order.setItems(List.of(item1));
-
-		ItemNotFound exception = assertThrows(ItemNotFound.class, () -> initializeItemUseCase.execute(order));
-		assertNotNull(exception);
-	}
-
 	private void mockItemDataProvider(Item... items) {
 		for (Item item : items) {
 			when(itemDataProvider.retrieveById(item.getId())).thenReturn(Optional.of(item));

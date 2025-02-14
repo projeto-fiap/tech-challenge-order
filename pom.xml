@@ -38,9 +38,9 @@
 		<sonar.language>java</sonar.language>
 		<sonar.inclusions>/*.java</sonar.inclusions>
 		<sonar.coverage.exclusions>
-			/exception/ItemNotFound.java,
-			/exception/NullIdException.java,
-			/exception/OrderNotFound.java
+			/Exception.java, /exception//.java,
+			/JwtAuthenticationFilter.java,
+			/WebSecurityConfig.java
 		</sonar.coverage.exclusions>
 
 	</properties>

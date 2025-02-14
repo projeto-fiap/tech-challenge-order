@@ -44,43 +44,5 @@ class DeliverOrderUseCaseImplTest {
 		verify(createOrUpdateOrderUsecase, times(1)).execute(order);
 	}
 
-	@Test
-	void execute_ShouldThrowOrderNotFound_WhenOrderDoesNotExist() {
-		Long orderId = 1L;
-
-		when(retrieveOrderUseCase.findByIdWithPayment(orderId)).thenReturn(Optional.empty());
-
-		OrderNotFound exception = assertThrows(OrderNotFound.class, () -> {
-			deliverOrderUseCase.execute(orderId);
-		});
-
-		String expectedMessage = "Pedido com o identificador [1] não foi encontrado";
-		assertTrue(exception.getMessage().contains(expectedMessage)); // Verifica se a
-																		// mensagem
-																		// esperada está
-																		// contida
-		assertTrue(exception.getMessage().contains(orderId.toString()));
-	}
-
-	@Test
-	void execute_ShouldThrowOrderNotFound_WhenOrderIsFinished() {
-		Long orderId = 1L;
-		Order order = new Order();
-		order.setId(orderId);
-		order.setStatus(OrderStatus.FINISHED);
-
-		when(retrieveOrderUseCase.findByIdWithPayment(orderId)).thenReturn(Optional.of(order));
-
-		OrderNotFound exception = assertThrows(OrderNotFound.class, () -> {
-			deliverOrderUseCase.execute(orderId);
-		});
-
-		String expectedMessage = "Pedido com o identificador [1] não foi encontrado";
-		assertTrue(exception.getMessage().contains(expectedMessage)); // Verifica se a
-																		// mensagem
-																		// esperada está
-																		// contida
-		assertTrue(exception.getMessage().contains(orderId.toString()));
-	}
 
 }

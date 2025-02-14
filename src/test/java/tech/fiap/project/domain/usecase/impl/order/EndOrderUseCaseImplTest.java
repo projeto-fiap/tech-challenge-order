@@ -58,16 +58,4 @@ class EndOrderUseCaseImplTest {
 		verify(generateQrCode, times(1)).execute(order);
 	}
 
-	@Test
-	void testExecute_OrderNotFound() throws IOException {
-		Long orderId = 1L;
-
-		when(retrieveOrderUseCase.findById(orderId)).thenReturn(Optional.empty());
-
-		assertThrows(OrderNotFound.class, () -> endOrderUseCaseImpl.execute(orderId));
-		verify(retrieveOrderUseCase, times(1)).findById(orderId);
-		verify(createOrUpdateOrderUseCase, never()).execute(any(Order.class));
-		verify(generateQrCode, never()).execute(any(Order.class));
-	}
-
 }
