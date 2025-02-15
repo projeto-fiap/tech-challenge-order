@@ -1,0 +1,76 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: project
+
+  datasource:
+    url: jdbc:h2:mem:testdb;NON_KEYWORDS=VALUE, TYPE, USER, NAME
+    username: postgres
+    password: postgres
+    driverClassName: org.h2.Driver
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master-test.xml
+    drop-first: true
+    enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show_sql: true
+
+
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: tech-challenge-payments
+            client-secret: http://localhost:29000
+            authorization-grant-type: client_credentials
+            scope: openid, profile, email
+            redirect-uri: http://localhost:29000
+            client-name: Pagamentos
+        provider:
+          keycloak:
+            token-uri: http://localhost:29000/realms/master/protocol/openid-connect/token
+            authorization-uri: http://localhost:29000/realms/master/protocol/openid-connect/auth
+            user-info-uri: http://localhost:29000/realms/master/protocol/openid-connect/userinfo
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:29000/realms/master
+
+  main:
+    allow-bean-definition-overriding: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    root: INFO
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+
+keycloak:
+  base-url: http://localhost:29000
+
+tech-challenge:
+  person:
+    url: http://localhost:8080
+  order:
+    client-id: 1234567890
+    client-secret: developer
+  payments:
+    url: http://localhost:8081
+    client-id: tech-challenge-payments
+    client-secret: "**********"
