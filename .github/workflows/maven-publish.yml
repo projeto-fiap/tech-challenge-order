@@ -188,6 +188,6 @@ jobs:
         run: kubectl config current-context
       - name: Deploy Kubernetes Resources
         run: |
-          kubectl apply -f src/main/resources/deploy/k8s/tech-challenge-order-deployment.yaml -n default-namespace
-          kubectl apply -f src/main/resources/deploy/k8s/hpa-tech-challenge-order.yaml -n default-namespace
-          kubectl apply -f src/main/resources/deploy/k8s/service-tech-challenge-order.yaml -n default-namespace
+          kubectl apply -f src/main/resources/k8s/tech-challenge-order-deployment.yaml -n default-namespace
+          kubectl apply -f src/main/resources/k8s/hpa-tech-challenge-order.yaml -n default-namespace
+          kubectl apply -f src/main/resources/k8s/service-tech-challenge-order.yaml -n default-namespace
