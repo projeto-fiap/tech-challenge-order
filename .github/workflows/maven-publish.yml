@@ -61,9 +61,6 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Clear Maven cache
-        run: mvn dependency:purge-local-repository -DactTransitively=false -DreResolve=false
-
       - name: Run Unit Tests
         run: mvn clean test -Dtest=!tech.integration.order.**
 
@@ -75,6 +72,7 @@ jobs:
       - name: Verify Test Results
         if: ${{ failure() }}
         run: echo "Unit tests or Sonar analysis failed. Check the logs for details."
+
   integrated-tests:
     name: Integrated Tests
     runs-on: ubuntu-latest
@@ -104,6 +102,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: mvn '-Dtest=tech.integration.order.**' test
+
   bdd-tests:
     name: BDD Tests
     runs-on: ubuntu-latest
@@ -132,6 +131,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn test '-Dtest=tech.features.RunCucumberTest'
+
   analysis-sonarqube:
     name: Quality Gate
     runs-on: ubuntu-latest
@@ -162,8 +162,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-      - name: Clone Repository
-        run: git clone https://github.com/projeto-fiap/-order.git && cd tech-challenge-order && docker build . -t matheuspatricio0/projeto-fiap:latest
+      - name: Build Docker Image
+        run: docker build . -t matheuspatricio0/projeto-fiap:latest
       - name: Push Docker image
         run: docker push matheuspatricio0/projeto-fiap:latest
 
