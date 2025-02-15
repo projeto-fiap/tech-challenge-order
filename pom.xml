@@ -32,21 +32,11 @@
         <sonar.organization>projeto-fiap-1</sonar.organization>
         <sonar.host.url>https://sonarcloud.io/</sonar.host.url>
         <sonar.projectKey>projeto-fiap_tech-order</sonar.projectKey>
-        <sonar.token>c4f1c85e87f0d1ad07136eeeadbb9dae32e51e1c</sonar.token>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.coverage.jacoco.xmlReportPaths>
-            ${project.basedir}/report-aggregate/target/site/
-            jacoco-aggregate/jacoco.xml
-        </sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
-        <sonar.inclusions>/*.java</sonar.inclusions>
-        <sonar.coverage.exclusions>
-            /Exception.java, /exception//.java,
-            /JwtAuthenticationFilter.java,
-            /WebSecurityConfig.java
-        </sonar.coverage.exclusions>
-
+        <sonar.inclusions>**/*.java</sonar.inclusions>
     </properties>
     <dependencies>
         <dependency>
