@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tech-challenge-order-deployment
+  namespace: default-namespace
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tech-challenge-order
+  template:
+    metadata:
+      labels:
+        app: tech-challenge-order
+    spec:
+      containers:
+        - name: tech-challenge-order
+          image: matheuspatricio0/projeto-fiap-order:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8082
+          env:
+            - name: POSTGRES_URL
+              value: jdbc:postgresql://projetofiaporder.caetpmx4dios.us-east-1.rds.amazonaws.com/postgres?currentSchema=public
+            - name: KEYCLOAK_BASE_URL
+              value: http://a35eaf96976814aafa0800213cb0a901-1833872259.us-east-1.elb.amazonaws.com
