@@ -2,6 +2,7 @@ package tech.fiap.project.infra.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,6 +28,7 @@ public class ItemEntity {
 	private ItemCategory itemCategory;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JsonIgnore // Ignora a serialização dos ingredientes
 	private List<ItemEntity> ingredients;
 
 	private String description;
