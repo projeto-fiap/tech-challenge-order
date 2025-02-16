@@ -6,4 +6,6 @@ public interface UpdateOrderUseCase {
 
 	Order setOrderPaid(Order order);
 
+	Order setOrderDone(Order order);
+
 }

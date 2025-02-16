@@ -5,22 +5,22 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tech.fiap.project.app.adapter.OrderMapper;
 import tech.fiap.project.app.dto.OrderResponseDTO;
 import tech.fiap.project.domain.entity.Order;
-import tech.fiap.project.domain.usecase.KitchenUseCase;
 import tech.fiap.project.domain.usecase.order.RetrieveOrderUseCase;
 import tech.fiap.project.domain.usecase.order.UpdateOrderUseCase;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CheckoutOrderServiceTest {
+class DoneOrderServiceTest {
 
 	@Mock
 	private RetrieveOrderUseCase retrieveOrderUseCase;
@@ -28,11 +28,8 @@ class CheckoutOrderServiceTest {
 	@Mock
 	private UpdateOrderUseCase updateOrderUseCase;
 
-	@Mock
-	private KitchenUseCase kitchenUseCase;
-
 	@InjectMocks
-	private CheckoutOrderService checkoutOrderService;
+	private DoneOrderService doneOrderService;
 
 	private Order order;
 
@@ -53,19 +50,18 @@ class CheckoutOrderServiceTest {
 		try (MockedStatic<OrderMapper> mockedOrderMapper = Mockito.mockStatic(OrderMapper.class)) {
 			// Arrange
 			when(retrieveOrderUseCase.findByIdWithPayment(1L)).thenReturn(Optional.of(order));
-			when(updateOrderUseCase.setOrderPaid(order)).thenReturn(order);
+			when(updateOrderUseCase.setOrderDone(order)).thenReturn(order);
 			mockedOrderMapper.when(() -> OrderMapper.toDTO(order)).thenReturn(orderResponseDTO);
 
 			// Act
-			Optional<OrderResponseDTO> result = checkoutOrderService.execute(1L);
+			Optional<OrderResponseDTO> result = doneOrderService.execute(1L);
 
 			// Assert
 			assertTrue(result.isPresent());
 			assertEquals(orderResponseDTO, result.get());
 
 			verify(retrieveOrderUseCase, times(1)).findByIdWithPayment(1L);
-			verify(updateOrderUseCase, times(1)).setOrderPaid(order);
-			verify(kitchenUseCase, times(1)).sendKitchen(order);
+			verify(updateOrderUseCase, times(1)).setOrderDone(order);
 			mockedOrderMapper.verify(() -> OrderMapper.toDTO(order), times(1)); // Verificação
 																				// do
 																				// método
@@ -80,14 +76,13 @@ class CheckoutOrderServiceTest {
 			when(retrieveOrderUseCase.findByIdWithPayment(1L)).thenReturn(Optional.empty());
 
 			// Act
-			Optional<OrderResponseDTO> result = checkoutOrderService.execute(1L);
+			Optional<OrderResponseDTO> result = doneOrderService.execute(1L);
 
 			// Assert
 			assertFalse(result.isPresent());
 
 			verify(retrieveOrderUseCase, times(1)).findByIdWithPayment(1L);
-			verify(updateOrderUseCase, never()).setOrderPaid(any());
-			verify(kitchenUseCase, never()).sendKitchen(any());
+			verify(updateOrderUseCase, never()).setOrderDone(any());
 			mockedOrderMapper.verify(() -> OrderMapper.toDTO(any(Order.class)), never()); // Especificando
 																							// o
 																							// tipo

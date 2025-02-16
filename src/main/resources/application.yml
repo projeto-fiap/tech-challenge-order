@@ -8,7 +8,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres?currentSchema=orders
     username: postgres
-    password: postgres
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
   liquibase:
@@ -31,7 +31,7 @@ spring:
         registration:
           keycloak:
             client-id: tech-challenge-payments
-            client-secret: ${KEYCLOAK_CLIENT_SECRET} # Melhor usar variável de ambiente
+            client-secret: ${KEYCLOAK_CLIENT_SECRET}
             authorization-grant-type: client_credentials
             scope: openid, profile, email
             redirect-uri: ${KEYCLOAK_BASE_URL}/login/oauth2/code/keycloak
@@ -66,11 +66,14 @@ springdoc:
 
 tech-challenge:
   person:
-    url: http://localhost:8080
+    url: ${PERSON_BASE_URL:http://localhost:8080}
   order:
     client-id: 1234567890
     client-secret: developer
   payments:
-    url: http://localhost:8081
+    url: ${PAYMENT_BASE_URL:http://localhost:8081}
     client-id: tech-challenge-payments
     client-secret: "**********"
+
+  kitchen:
+    url:  ${KITCHEN_BASE_URL:http://localhost:8083}

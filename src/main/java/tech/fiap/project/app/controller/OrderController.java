@@ -25,7 +25,7 @@ public class OrderController {
 
 	private CheckoutOrderService checkoutOrderService;
 
-	private DeliverOrderService deliverOrderService;
+	private DoneOrderService doneOrderService;
 
 	@PostMapping
 	public ResponseEntity<OrderResponseDTO> createOrUpdate(@RequestBody OrderRequestDTO orderRequestDTO) {
@@ -60,10 +60,10 @@ public class OrderController {
 		return ResponseEntity.ok(retrieveOrderService.findOngoingAll());
 	}
 
-	@PutMapping(value = "/deliver/{id}")
-	public ResponseEntity<OrderResponseDTO> deliver(@PathVariable Long id) {
-		OrderResponseDTO deliveredOrder = deliverOrderService.execute(id);
-		return ResponseEntity.ok(deliveredOrder);
+	@PutMapping(value = "/done/{id}")
+	public ResponseEntity<OrderResponseDTO> done(@PathVariable Long id) {
+		Optional<OrderResponseDTO> paidOrder = doneOrderService.execute(id);
+		return paidOrder.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 
 }

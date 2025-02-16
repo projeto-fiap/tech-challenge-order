@@ -109,20 +109,6 @@ class ConfigurationTest {
 	}
 
 	@Test
-	void testDeliverOrderUseCaseBean() {
-		// Arrange
-		CreateOrUpdateOrderUseCase createOrUpdateOrderUseCase = mock(CreateOrUpdateOrderUseCase.class);
-		RetrieveOrderUseCaseImpl retrieveOrderUseCase = mock(RetrieveOrderUseCaseImpl.class);
-
-		// Act
-		DeliverOrderUseCase deliverOrderUseCase = configuration.deliverOrderUseCase(createOrUpdateOrderUseCase,
-				retrieveOrderUseCase);
-
-		// Assert
-		assertNotNull(deliverOrderUseCase);
-	}
-
-	@Test
 	void testDeleteItemUseCaseBean() {
 		// Act
 		DeleteItemUseCase deleteItemUseCase = configuration.deleteItemUseCase(itemDataProvider);
