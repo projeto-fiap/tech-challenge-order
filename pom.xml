@@ -38,7 +38,6 @@
         <sonar.language>java</sonar.language>
         <sonar.inclusions>**/*.java</sonar.inclusions>
         <sonar.coverage.exclusions>
-            /*Exception.java, /exception//*.java,
             /JwtAuthenticationFilter.java,
             /Configuration.java,
             /WebSecurityConfig.java
@@ -305,12 +304,16 @@
                 <version>3.9.1.2184</version>
             </plugin>
             <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.1.2184</version>
+            </plugin>
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.12</version>
+                <version>0.8.7</version> <!-- Verifique a versão mais recente -->
                 <executions>
                     <execution>
-                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
@@ -323,6 +326,28 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <includes>
+                        <include>tech/fiap/project/**/*</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/test/**</exclude>
+                        <exclude>**/KeycloakJwtAuthenticationConverter.java**</exclude>
+                        <exclude>**/generated-sources/**</exclude>
+                        <exclude>**/JwtAuthenticationFilter.java</exclude>
+                        <exclude>**/JwtUtil.java</exclude>
+                        <exclude>**/WebSecurityConfig.java</exclude>
+                        <exclude>**/infra/entity/**</exclude>
+                        <exclude>**/ProjectApplication**</exclude>
+                        <exclude>**/infra/configuration/**</exclude>
+                        <exclude>**/app/service/order/**</exclude>
+                        <exclude>**/project/app/controller/**</exclude>
+                        <exclude>**/project/domain/usecase/impl/item/CreateOrUpdateOrderUseCaseImpl.new ParameterizedTypeReference/**</exclude>
+                        <exclude>**/project/domain/usecase/impl/item/CreateOrUpdateOrderUseCaseImpl/**</exclude>
+                        <exclude>**/project/infra/mapper/OrderRepositoryMapper/**</exclude>
+                        <exclude>**/project/domain/usecase/impl/item/**</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
