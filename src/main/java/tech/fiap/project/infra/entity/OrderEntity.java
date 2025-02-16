@@ -2,6 +2,8 @@ package tech.fiap.project.infra.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -10,7 +12,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "\"order\"")
-@Data
+@Getter
+@Setter
 public class OrderEntity {
 
 	@Id

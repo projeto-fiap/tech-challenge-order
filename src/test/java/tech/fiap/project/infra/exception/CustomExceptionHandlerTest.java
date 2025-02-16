@@ -12,40 +12,41 @@ import static org.mockito.Mockito.mock;
 
 class CustomExceptionHandlerTest {
 
-    private CustomExceptionHandler customExceptionHandler;
+	private CustomExceptionHandler customExceptionHandler;
 
-    @Mock
-    private WebRequest webRequest;
+	@Mock
+	private WebRequest webRequest;
 
-    @BeforeEach
-    void setUp() {
-        customExceptionHandler = new CustomExceptionHandler();
-        webRequest = mock(WebRequest.class);
-    }
+	@BeforeEach
+	void setUp() {
+		customExceptionHandler = new CustomExceptionHandler();
+		webRequest = mock(WebRequest.class);
+	}
 
-    @Test
-    void shouldHandleBusinessExceptionWithoutMetadata() {
-        BusinessException exception = new BusinessException("Error message", HttpStatus.BAD_REQUEST, null);
+	@Test
+	void shouldHandleBusinessExceptionWithoutMetadata() {
+		BusinessException exception = new BusinessException("Error message", HttpStatus.BAD_REQUEST, null);
 
-        ResponseEntity<Object> response = customExceptionHandler.handleConflict(exception, webRequest);
+		ResponseEntity<Object> response = customExceptionHandler.handleConflict(exception, webRequest);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).isInstanceOf(ExceptionResponse.class);
-        ExceptionResponse body = (ExceptionResponse) response.getBody();
-        assertThat(body.getMessage()).isEqualTo("Error message");
-        assertThat(body.getMetadata()).isNull();
-    }
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+		assertThat(response.getBody()).isInstanceOf(ExceptionResponse.class);
+		ExceptionResponse body = (ExceptionResponse) response.getBody();
+		assertThat(body.getMessage()).isEqualTo("Error message");
+		assertThat(body.getMetadata()).isNull();
+	}
 
-    @Test
-    void shouldHandleBusinessExceptionWithMetadata() {
-        BusinessException exception = new BusinessException("Error message", HttpStatus.NOT_FOUND, "Some metadata");
+	@Test
+	void shouldHandleBusinessExceptionWithMetadata() {
+		BusinessException exception = new BusinessException("Error message", HttpStatus.NOT_FOUND, "Some metadata");
 
-        ResponseEntity<Object> response = customExceptionHandler.handleConflict(exception, webRequest);
+		ResponseEntity<Object> response = customExceptionHandler.handleConflict(exception, webRequest);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(response.getBody()).isInstanceOf(ExceptionResponse.class);
-        ExceptionResponse body = (ExceptionResponse) response.getBody();
-        assertThat(body.getMessage()).isEqualTo("Error message");
-        assertThat(body.getMetadata()).isEqualTo("Some metadata");
-    }
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+		assertThat(response.getBody()).isInstanceOf(ExceptionResponse.class);
+		ExceptionResponse body = (ExceptionResponse) response.getBody();
+		assertThat(body.getMessage()).isEqualTo("Error message");
+		assertThat(body.getMetadata()).isEqualTo("Some metadata");
+	}
+
 }

@@ -7,14 +7,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NullIdExceptionTest {
 
-    @Test
-    void testConstructor_shouldSetCorrectValues() {
-        // Act
-        NullIdException exception = new NullIdException();
+	@Test
+	void testConstructor_shouldSetCorrectValues() {
+		// Act
+		NullIdException exception = new NullIdException();
 
-        // Assert
-        assertEquals("item.id.null", exception.getMessage());
-        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatusCode());
+		// Assert
+		assertEquals("item.id.null", exception.getMessage());
+		assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatusCode());
 
-    }
+	}
+
 }

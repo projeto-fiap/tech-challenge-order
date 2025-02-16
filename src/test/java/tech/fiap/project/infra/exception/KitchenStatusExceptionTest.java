@@ -7,17 +7,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class KitchenStatusExceptionTest {
 
-    @Test
-    void testConstructor_shouldSetCorrectValues() {
-        // Arrange
-        Long orderId = 456L;
+	@Test
+	void testConstructor_shouldSetCorrectValues() {
+		// Arrange
+		Long orderId = 456L;
 
-        // Act
-        KitchenStatusException exception = new KitchenStatusException(orderId);
+		// Act
+		KitchenStatusException exception = new KitchenStatusException(orderId);
 
-        // Assert
-        assertEquals("order.kitchen.status.exception", exception.getMessage());
-        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatusCode());
+		// Assert
+		assertEquals("order.kitchen.status.exception", exception.getMessage());
+		assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatusCode());
 
-    }
+	}
+
 }

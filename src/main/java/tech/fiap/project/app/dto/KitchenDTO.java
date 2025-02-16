@@ -1,11 +1,14 @@
 package tech.fiap.project.app.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import tech.fiap.project.domain.entity.KitchenStatus;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 public class KitchenDTO {
 
 	private Long orderId;

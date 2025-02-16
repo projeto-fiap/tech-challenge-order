@@ -2,13 +2,16 @@ package tech.fiap.project.infra.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import tech.fiap.project.app.dto.IngredientCategory;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ingredient_item")
-@Data
+@Getter
+@Setter
 public class IngredientItemEntity {
 
 	@Id

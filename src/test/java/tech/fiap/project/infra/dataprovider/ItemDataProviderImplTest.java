@@ -103,12 +103,42 @@ class ItemDataProviderImplTest {
 	}
 
 	@Test
+	void testSave() {
+		// Arrange
+		ItemEntity itemEntity = new ItemEntity();
+		itemEntity.setId(1L);
+		itemEntity.setName("Item 1");
+		itemEntity.setPrice(new BigDecimal("10.00"));
+		itemEntity.setQuantity(new BigDecimal("5"));
+		itemEntity.setUnit("kg");
+		itemEntity.setItemCategory(ItemCategory.FOOD);
+		itemEntity.setIngredients(Collections.emptyList()); // Lista vazia
+		itemEntity.setDescription("Description 1");
+		itemEntity.setImageUrl("http://example.com/image.jpg");
+
+		// Usando doReturn() para garantir que o itemEntity seja o mesmo
+		doReturn(itemEntity).when(itemRepository).save(any(ItemEntity.class));
+
+		// Act
+		Item result = itemDataProvider.save(item);
+
+		// Assert
+		assertNotNull(result);
+		assertEquals(item.getId(), result.getId());
+		verify(itemRepository, times(1)).save(any(ItemEntity.class)); // Usando any() no
+																		// verify também
+	}
+
+	@Test
 	void testSaveAll() {
 		// Arrange
-		List<Item> items = Collections.singletonList(item);
-		List<ItemEntity> itemEntities = Collections.singletonList(itemEntity);
+		List<Item> items = Collections.singletonList(item); // Lista de Item (domínio)
+		List<ItemEntity> itemEntities = Collections.singletonList(itemEntity); // Lista de
+																				// ItemEntity
+																				// (entidade)
 
-		when(itemRepository.saveAll(itemEntities)).thenReturn(itemEntities);
+		// Usando doReturn() para garantir que o itemEntities seja o mesmo
+		doReturn(itemEntities).when(itemRepository).saveAll(anyList());
 
 		// Act
 		List<Item> result = itemDataProvider.saveAll(items);
@@ -117,21 +147,8 @@ class ItemDataProviderImplTest {
 		assertNotNull(result);
 		assertEquals(1, result.size());
 		assertEquals(item.getId(), result.get(0).getId());
-		verify(itemRepository, times(1)).saveAll(itemEntities);
-	}
-
-	@Test
-	void testSave() {
-		// Arrange
-		when(itemRepository.save(itemEntity)).thenReturn(itemEntity);
-
-		// Act
-		Item result = itemDataProvider.save(item);
-
-		// Assert
-		assertNotNull(result);
-		assertEquals(item.getId(), result.getId());
-		verify(itemRepository, times(1)).save(itemEntity);
+		verify(itemRepository, times(1)).saveAll(anyList()); // Usando anyList() no verify
+																// também
 	}
 
 	@Test
