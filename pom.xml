@@ -341,9 +341,7 @@
                         <exclude>**/ProjectApplication**</exclude>
                         <exclude>**/infra/configuration/**</exclude>
                         <exclude>**/app/service/order/**</exclude>
-                        <exclude>**/project/app/controller/**</exclude>
                         <exclude>**/project/infra/mapper/OrderRepositoryMapper/**</exclude>
-                        <exclude>**/project/domain/usecase/impl/item/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
