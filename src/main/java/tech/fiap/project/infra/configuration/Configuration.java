@@ -15,6 +15,7 @@ import tech.fiap.project.domain.dataprovider.ItemDataProvider;
 import tech.fiap.project.domain.dataprovider.OrderDataProvider;
 import tech.fiap.project.domain.usecase.CreateQrCodeUseCase;
 import tech.fiap.project.domain.usecase.impl.CreateQrCodeUseCaseImpl;
+import tech.fiap.project.domain.usecase.impl.KitchenUseCaseImpl;
 import tech.fiap.project.domain.usecase.impl.item.*;
 
 import tech.fiap.project.domain.usecase.impl.order.*;
@@ -55,6 +56,9 @@ public class Configuration {
 
 	@Value("${tech-challenge.payments.client-secret}")
 	String paymentsClientSecret;
+
+	@Value("${tech-challenge.kitchen.url}")
+	String kitchenServiceUrl;
 
 	@Bean
 	public ObjectMapper objectMapper() {
@@ -129,6 +133,11 @@ public class Configuration {
 			RestTemplate restTemplateKeycloak) {
 		return new CreateQrCodeUseCaseImpl(restTemplatePayments, restTemplateKeycloak, paymentsUrl, keycloakBaseUrl,
 				paymentsClientId, paymentsClientSecret);
+	}
+
+	@Bean
+	public KitchenUseCaseImpl kitchenUseCase(RestTemplate restTemplate) {
+		return new KitchenUseCaseImpl(restTemplate, kitchenServiceUrl, paymentsClientId, keycloakBaseUrl, paymentsClientSecret);
 	}
 
 }

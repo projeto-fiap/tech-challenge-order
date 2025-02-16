@@ -18,4 +18,9 @@ public class UpdateOrderUseCaseImpl implements UpdateOrderUseCase {
 		return orderDataProvider.updateStatus(order, OrderStatus.PAID);
 	}
 
+	@Override
+	public Order setOrderDone(Order order) {
+		return orderDataProvider.updateStatus(order, OrderStatus.FINISHED);
+	}
+
 }
