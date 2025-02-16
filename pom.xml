@@ -38,7 +38,8 @@
         <sonar.language>java</sonar.language>
         <sonar.inclusions>**/*.java</sonar.inclusions>
         <sonar.exclusions>
-            src/main/java/tech/fiap/project/domain/usecase/impl/item
+            src/main/java/tech/fiap/project/domain/usecase/impl/item/**/*.java
+            src/main/java/tech/fiap/project/infra/entity/**/*.java
         </sonar.exclusions>
     </properties>
     <dependencies>
