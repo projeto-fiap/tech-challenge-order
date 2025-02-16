@@ -74,3 +74,6 @@ tech-challenge:
     url: http://localhost:8081
     client-id: tech-challenge-payments
     client-secret: "**********"
+
+  kitchen:
+    url: http://localhost:8080

@@ -25,8 +25,6 @@ public class OrderController {
 
 	private CheckoutOrderService checkoutOrderService;
 
-	private DeliverOrderService deliverOrderService;
-
 	@PostMapping
 	public ResponseEntity<OrderResponseDTO> createOrUpdate(@RequestBody OrderRequestDTO orderRequestDTO) {
 		OrderResponseDTO orderCreated = createOrderService.execute(orderRequestDTO);
@@ -58,12 +56,6 @@ public class OrderController {
 	@GetMapping(value = "/ongoing/orders")
 	public ResponseEntity<List<OrderResponseDTO>> ongoingOrders() {
 		return ResponseEntity.ok(retrieveOrderService.findOngoingAll());
-	}
-
-	@PutMapping(value = "/deliver/{id}")
-	public ResponseEntity<OrderResponseDTO> deliver(@PathVariable Long id) {
-		OrderResponseDTO deliveredOrder = deliverOrderService.execute(id);
-		return ResponseEntity.ok(deliveredOrder);
 	}
 
 }

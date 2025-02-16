@@ -34,9 +34,6 @@ class OrderControllerTest {
 	@Mock
 	private CheckoutOrderService checkoutOrderService;
 
-	@Mock
-	private DeliverOrderService deliverOrderService;
-
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);

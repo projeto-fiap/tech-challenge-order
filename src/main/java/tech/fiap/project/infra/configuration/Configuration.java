@@ -22,7 +22,6 @@ import tech.fiap.project.domain.usecase.impl.order.*;
 import tech.fiap.project.domain.usecase.item.DeleteItemUseCase;
 import tech.fiap.project.domain.usecase.item.InitializeItemUseCase;
 import tech.fiap.project.domain.usecase.order.CreateOrUpdateOrderUseCase;
-import tech.fiap.project.domain.usecase.order.DeliverOrderUseCase;
 import tech.fiap.project.domain.usecase.order.EndOrderUseCase;
 import tech.fiap.project.domain.usecase.order.UpdateOrderUseCase;
 
@@ -94,12 +93,6 @@ public class Configuration {
 	@Bean
 	public CalculateTotalOrderUseCaseImpl calculateTotalOrderUseCase() {
 		return new CalculateTotalOrderUseCaseImpl();
-	}
-
-	@Bean
-	public DeliverOrderUseCase deliverOrderUseCase(CreateOrUpdateOrderUseCase createOrUpdateOrderUseCase,
-			RetrieveOrderUseCaseImpl retrieveOrderUseCase) {
-		return new DeliverOrderUseCaseImpl(createOrUpdateOrderUseCase, retrieveOrderUseCase);
 	}
 
 	@Bean
