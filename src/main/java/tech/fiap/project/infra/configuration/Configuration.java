@@ -137,7 +137,8 @@ public class Configuration {
 
 	@Bean
 	public KitchenUseCaseImpl kitchenUseCase(RestTemplate restTemplate) {
-		return new KitchenUseCaseImpl(restTemplate, kitchenServiceUrl, paymentsClientId, keycloakBaseUrl, paymentsClientSecret);
+		return new KitchenUseCaseImpl(restTemplate, kitchenServiceUrl, paymentsClientId, keycloakBaseUrl,
+				paymentsClientSecret);
 	}
 
 }

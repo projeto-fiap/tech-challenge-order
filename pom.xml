@@ -37,11 +37,9 @@
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
         <sonar.inclusions>**/*.java</sonar.inclusions>
-        <sonar.coverage.exclusions>
-            /JwtAuthenticationFilter.java,
-            /Configuration.java,
-            /WebSecurityConfig.java
-        </sonar.coverage.exclusions>
+        <sonar.exclusions>
+            src/main/java/tech/fiap/project/domain/usecase/impl/item
+        </sonar.exclusions>
     </properties>
     <dependencies>
         <dependency>
@@ -331,17 +329,10 @@
                         <include>tech/fiap/project/**/*</include>
                     </includes>
                     <excludes>
-                        <exclude>**/test/**</exclude>
-                        <exclude>**/KeycloakJwtAuthenticationConverter.java**</exclude>
-                        <exclude>**/generated-sources/**</exclude>
-                        <exclude>**/JwtAuthenticationFilter.java</exclude>
-                        <exclude>**/JwtUtil.java</exclude>
-                        <exclude>**/WebSecurityConfig.java</exclude>
-                        <exclude>**/infra/entity/**</exclude>
-                        <exclude>**/ProjectApplication**</exclude>
+                        <exclude>**/project/infra/entity/**</exclude>
                         <exclude>**/infra/configuration/**</exclude>
                         <exclude>**/app/service/order/**</exclude>
-                        <exclude>**/project/infra/mapper/OrderRepositoryMapper/**</exclude>
+                        <exclude>**/fiap/project/domain/usecase/impl/item/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>

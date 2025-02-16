@@ -24,6 +24,7 @@ public class OrderController {
 	private EndOrderService endOrderService;
 
 	private CheckoutOrderService checkoutOrderService;
+
 	private DoneOrderService doneOrderService;
 
 	@PostMapping
@@ -64,4 +65,5 @@ public class OrderController {
 		Optional<OrderResponseDTO> paidOrder = doneOrderService.execute(id);
 		return paidOrder.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
+
 }
