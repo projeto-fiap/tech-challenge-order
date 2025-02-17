@@ -13,4 +13,5 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
 	@Query("SELECT i FROM ItemEntity i WHERE i.itemCategory = :category")
 	List<ItemEntity> findByCategory(ItemCategory category);
 
+
 }
