@@ -9,8 +9,8 @@ RUN apt-get update \
 && apt-get clean \
 && git config --global user.name "Leonardo Soares" \
 && git config --global user.email "leonardo.soares@sptech.school.com.br" \
-&& git clone https://github.com/projeto-fiap/tech-challenge-payments.git
-WORKDIR /app/tech-challenge-payments
+&& git clone https://github.com/projeto-fiap/tech-challenge-order.git
+WORKDIR /app/tech-challenge-order
 
 RUN apt-get update \
 && apt-get install --no-install-recommends -y build-essential maven \
