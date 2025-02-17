@@ -66,14 +66,14 @@ springdoc:
 
 tech-challenge:
   person:
-    url: ${PERSON_BASE_URL:http://localhost:8080}
+    url: ${PERSON_BASE_URL:http://a5e44c4cbb24f49f6a3ca982221c26dc-1572021849.us-east-1.elb.amazonaws.com}
   order:
     client-id: 1234567890
     client-secret: developer
   payments:
-    url: ${PAYMENT_BASE_URL:http://localhost:8081}
+    url: ${PAYMENT_BASE_URL:http://a903677116b4046f19a1f240295471d2-1798565935.us-east-1.elb.amazonaws.com}
     client-id: tech-challenge-payments
     client-secret: "**********"
 
   kitchen:
-    url:  ${KITCHEN_BASE_URL:http://localhost:8083}
+    url:  ${KITCHEN_BASE_URL:http://a2b6e8ec8a54d46ac823a1eb29e521f3-1251996319.us-east-1.elb.amazonaws.com}
